@@ -1,0 +1,5 @@
+pyqt5>=5.15
+pyserial>=3.5
+numpy>=1.23
+pyqtgraph>=0.13
+pygame>=2.0
