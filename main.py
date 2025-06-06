@@ -1563,7 +1563,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Flash v4"))
         self.Sequence_time_text.setText(_translate("MainWindow", "T-00"))
         self.parameter1_text2.setText(_translate("MainWindow", "m"))
         self.parameter1_text1.setText(_translate("MainWindow", "ARTITUDE"))
