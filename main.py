@@ -19,6 +19,7 @@ HANWOOL
 FCP Flash v4
 © HANWOOL All Rights Reserved
 2025 YBB(ybb1833@naver.com)
+project site : https://github.com/YBB-space/FLASH_V4?tab=readme-ov-file#flash_v4
 """
 
 import serial
@@ -35,6 +36,7 @@ import time
 import numpy as np
 from PyQt5.QtCore import QTimer
 from PyQt5.QtCore import QObject
+from PyQt5.QtGui import QIcon
 import sys
 import os
 
@@ -171,9 +173,12 @@ class Ui_MainWindow(object):
         self.ser = None
 
     def setupUi(self, MainWindow):
+
+        
         global port
         if simulation_mode == 0:
             self.ser = serial.Serial(port, 19200)
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.setFixedSize(1281, 721)
         MainWindow.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(25, 25, 25, 255), stop:1 rgba(105, 105, 105, 255));")
@@ -612,7 +617,7 @@ class Ui_MainWindow(object):
         self.Program_Info_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.Program_Info_btn.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
         self.Program_Info_btn.setText("")
-        logo_img_path = Path(__file__).parent / "img" / "logo.png"
+        logo_img_path = Path(__file__).parent / "img" / "Flash_logo.png"
         self.Program_Info_btn.setPixmap(QtGui.QPixmap(str(logo_img_path)))
         self.Program_Info_btn.setScaledContents(True)
         self.Program_Info_btn.setAlignment(QtCore.Qt.AlignCenter)
@@ -943,7 +948,7 @@ class Ui_MainWindow(object):
         self.Program_Info_Logo.setGeometry(QtCore.QRect(900, 110, 41, 41))
         self.Program_Info_Logo.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
         self.Program_Info_Logo.setText("")
-        logo_img_path = Path(__file__).parent / "img" / "logo.png"
+        logo_img_path = Path(__file__).parent / "img" / "Flash_logo.png"
         self.Program_Info_Logo.setPixmap(QtGui.QPixmap(str(logo_img_path)))
         self.Program_Info_Logo.setScaledContents(True)
         self.Program_Info_Logo.setAlignment(QtCore.Qt.AlignCenter)
@@ -1222,6 +1227,13 @@ class Ui_MainWindow(object):
         self.Chart_box.setText("")
         self.Chart_box.setAlignment(QtCore.Qt.AlignCenter)
         self.Chart_box.setObjectName("Chart_box")
+
+        pg.setConfigOptions(antialias=True)  # 곡선 부드럽게
+
+        # 전체 테마 설정
+        pg.setConfigOption('background', '#1e1e1e')  # 다크 모드 배경
+        pg.setConfigOption('foreground', 'white')    # 축/글자 흰색
+        
         self.Chart_3 = pg.PlotWidget(MainWindow, title="N/A")
         # = gl.GLViewWidget(MainWindow)
         # 좌표축 추가
@@ -1273,23 +1285,26 @@ class Ui_MainWindow(object):
 "font: 25 80pt \"Inter\";")
         self.Program_Info_Text2_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.Program_Info_Text2_2.setObjectName("Program_Info_Text2_2")
-        self.intro_text2 = QtWidgets.QLabel(self.centralwidget)
-        self.intro_text2.setGeometry(QtCore.QRect(60, 130, 211, 90))
+        self.intro_img_2 = QtWidgets.QLabel(self.centralwidget)
+        self.intro_img_2.setGeometry(QtCore.QRect(60, 130, 211, 90))
         font = QtGui.QFont()
         font.setFamily("Inter")
         font.setPointSize(80)
         font.setBold(False)
         font.setItalic(False)
         font.setWeight(50)
-        self.intro_text2.setFont(font)
-        self.intro_text2.setStyleSheet("background-color: rgb(0, 0, 0, 0);\n"
+        self.intro_img_2.setFont(font)
+        self.intro_img_2.setStyleSheet("background-color: rgb(0, 0, 0, 0);\n"
 "color: rgb(255, 255, 255);\n"
 "border-color: rgb(0, 0, 0);\n"
 "font: 80pt \"Inter\";")
-        self.intro_text2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.intro_text2.setObjectName("intro_text2")
+        self.intro_img_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.intro_img_2.setObjectName("intro_img_2")
         self.intro_text1 = QtWidgets.QLabel(self.centralwidget)
-        self.intro_text1.setGeometry(QtCore.QRect(60, 90, 231, 40))
+        intro_img_path = Path(__file__).parent / "img" / "intro_logo.png"
+        self.intro_img_2.setPixmap(QtGui.QPixmap(str(intro_img_path)))
+        self.intro_img_2.setScaledContents(True)
+        self.intro_img_2.setGeometry(QtCore.QRect(70, 150, 331, 98))
         font = QtGui.QFont()
         font.setFamily("Inter")
         font.setPointSize(40)
@@ -1304,7 +1319,7 @@ class Ui_MainWindow(object):
         self.intro_text1.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.intro_text1.setObjectName("intro_text1")
         self.intro_HW_main = QtWidgets.QLabel(self.centralwidget)
-        self.intro_HW_main.setGeometry(QtCore.QRect(60, 560, 271, 31))
+        self.intro_HW_main.setGeometry(QtCore.QRect(70, 550, 271, 31))
         font = QtGui.QFont()
         font.setFamily("Inter")
         font.setPointSize(20)
@@ -1319,7 +1334,7 @@ class Ui_MainWindow(object):
         self.intro_HW_main.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.intro_HW_main.setObjectName("intro_HW_main")
         self.intro_HW_text = QtWidgets.QLabel(self.centralwidget)
-        self.intro_HW_text.setGeometry(QtCore.QRect(60, 540, 51, 31))
+        self.intro_HW_text.setGeometry(QtCore.QRect(70, 530, 51, 31))
         font = QtGui.QFont()
         font.setFamily("Inter")
         font.setPointSize(13)
@@ -1334,7 +1349,7 @@ class Ui_MainWindow(object):
         self.intro_HW_text.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.intro_HW_text.setObjectName("intro_HW_text")
         self.intro_strart_btn2 = ClickableLabel(self.centralwidget)
-        self.intro_strart_btn2.setGeometry(QtCore.QRect(114, 639, 61, 21))
+        self.intro_strart_btn2.setGeometry(QtCore.QRect(124, 629, 61, 21))
         font = QtGui.QFont()
         font.setFamily("Inter 24pt")
         font.setPointSize(15)
@@ -1350,7 +1365,7 @@ class Ui_MainWindow(object):
         self.intro_strart_btn2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.intro_strart_btn2.setObjectName("intro_strart_btn2")
         self.intro_strart_btn1 = ClickableLabel(self.centralwidget)
-        self.intro_strart_btn1.setGeometry(QtCore.QRect(53, 630, 151, 41))
+        self.intro_strart_btn1.setGeometry(QtCore.QRect(63, 620, 151, 41))
         font = QtGui.QFont()
         font.setFamily("AppleSDGothicNeoSB00")
         font.setPointSize(11)
@@ -1362,14 +1377,14 @@ class Ui_MainWindow(object):
         self.intro_strart_btn1.setAlignment(QtCore.Qt.AlignCenter)
         self.intro_strart_btn1.setObjectName("intro_strart_btn1")
         self.intro_strart_btn3 = ClickableLabel(self.centralwidget)
-        self.intro_strart_btn3.setGeometry(QtCore.QRect(63, 643, 2, 15))
+        self.intro_strart_btn3.setGeometry(QtCore.QRect(73, 633, 2, 15))
         self.intro_strart_btn3.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.intro_strart_btn3.setStyleSheet("border-radius :1px;\n"
 "background-color: rgb(43, 162, 255);")
         self.intro_strart_btn3.setText("")
         self.intro_strart_btn3.setObjectName("intro_strart_btn3")
         self.intro_HW_img = QtWidgets.QLabel(self.centralwidget)
-        self.intro_HW_img.setGeometry(QtCore.QRect(60, 600, 81, 16))
+        self.intro_HW_img.setGeometry(QtCore.QRect(70, 590, 81, 16))
         font = QtGui.QFont()
         font.setFamily("Inter")
         font.setPointSize(20)
@@ -1388,7 +1403,7 @@ class Ui_MainWindow(object):
         self.intro_HW_img.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.intro_HW_img.setObjectName("intro_HW_img")
         self.intro_img = QtWidgets.QLabel(self.centralwidget)
-        self.intro_img.setGeometry(QtCore.QRect(560, 110, 721, 531))
+        self.intro_img.setGeometry(QtCore.QRect(560, 130, 721, 531))
         font = QtGui.QFont()
         font.setFamily("Inter")
         font.setPointSize(80)
@@ -1487,9 +1502,7 @@ class Ui_MainWindow(object):
         self.gauge_b.raise_()
         self.Chart_box_2.raise_()
 
-        self.Program_Info_Text2_2.raise_()
-        self.intro_text2.raise_()
-        self.intro_text1.raise_()
+        self.intro_img_2.raise_()
         self.intro_HW_main.raise_()
         self.intro_HW_text.raise_()
         self.intro_strart_btn1.raise_()
@@ -1617,7 +1630,7 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-------------------------------------------------------</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.Program_Info_Text2_2.setText(_translate("MainWindow", "V4"))
-        self.intro_text2.setText(_translate("MainWindow", "Flash"))
+        self.intro_img_2.setText(_translate("MainWindow", ""))
         self.intro_text1.setText(_translate("MainWindow", "welcome to"))
         print(f"{port} = port")
         self.intro_HW_main.setText(_translate("MainWindow", f"{port} Arduino"))
@@ -1665,7 +1678,7 @@ class Ui_MainWindow(object):
         self.feedback_Title.hide()
         self.feedback_logo.hide()
         self.feedback_time.hide()
-        self.intro_text2.hide()
+        self.intro_img_2.hide()
         self.Program_Info_Text2_2.hide()
         self.intro_text1.hide()
         self.intro_HW_main.hide()
@@ -2224,13 +2237,153 @@ class Ui_MainWindow(object):
             self.y_data.append(parameter1_data)
             self.y2_data.append(parameter2_data)
 
-            # 추력 그래프 (Chart_1)
+            # 그래프 클리어 후 그리기
             self.Chart_1.clear()
-            self.Chart_1.plot(self.x_data, self.y_data, pen='b')
+            self.Chart_1.plot(self.x_data, self.y_data)
+
+            pen = pg.mkPen(color=(0, 200, 255), width=2)
+
+            gradient = QtGui.QLinearGradient(0, 0, 0, 1000)  # y=0 ~ y=10 구간에서 그라데이션
+            gradient.setCoordinateMode(QtGui.QGradient.LogicalMode)
+            gradient.setColorAt(1.0, QtGui.QColor(0, 200, 255, 200))    # 위쪽
+            gradient.setColorAt(0.0, QtGui.QColor(0, 200, 255, 0))  # 아래쪽
+
+            brush = QtGui.QBrush(gradient)
+
+            self.Chart_1.plot(
+                self.x_data, self.y2_data,
+                pen=pen,
+                fillLevel=0,        # y=0을 기준으로 아래를 채움
+                brush=brush         # 채우는 색
+            )
 
             # 압력 그래프 (Chart_2)
             self.Chart_2.clear()
-            self.Chart_2.plot(self.x_data, self.y2_data, pen='r')
+            self.Chart_2.plot(self.x_data, self.y2_data)
+
+            pen = pg.mkPen(color=(255, 24, 116), width=2)
+
+            gradient = QtGui.QLinearGradient(0, 0, 0, 10)  # y=0 ~ y=10 구간에서 그라데이션
+            gradient.setCoordinateMode(QtGui.QGradient.LogicalMode)
+            gradient.setColorAt(1.0, QtGui.QColor(216, 0, 68, 200))    # 위쪽rgb(255, 24, 116)
+            gradient.setColorAt(0.0, QtGui.QColor(216, 0, 68, 0))  # 아래쪽
+
+            brush = QtGui.QBrush(gradient)
+            
+            self.Chart_2.plot(
+                self.x_data, self.y_data,
+                pen=pen,
+                fillLevel=0,        # y=0을 기준으로 아래를 채움
+                brush=brush         # 채우는 색
+            )
+
+            for y_value in [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600]:
+                line = pg.InfiniteLine(pos=y_value, angle=0, pen=pg.mkPen((150, 150, 150), width=0.3))
+                self.Chart_1.addItem(line)
+            for y_value in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5]:
+                line = pg.InfiniteLine(pos=y_value, angle=0, pen=pg.mkPen((150, 150, 150), width=0.3))
+                self.Chart_2.addItem(line)
+
+
+
+
+
+            # 최대 파라미터1 계산
+            max_parameter1 = max(self.y_data)
+
+            # 최대 파라미터1 지점에 빨간 가로줄 추가
+            max_line = pg.InfiniteLine(
+                pos=max_parameter1,
+                angle=0,  # 수평선
+                pen=pg.mkPen(color='red', width=1, style=pg.QtCore.Qt.DashLine)
+            )
+            self.Chart_1.addItem(max_line)
+
+            # 평균 파라미터1 계산
+            avg_parameter1 = sum(self.y_data) / len(self.y_data)
+
+            # 평균 파라미터1 지점에 파란 점선 추가
+            avg_line = pg.InfiniteLine(
+                pos=avg_parameter1,
+                angle=0,  # 수평선
+                pen=pg.mkPen(color=QtGui.QColor(255, 179, 0), width=1, style=pg.QtCore.Qt.DashLine)
+            )
+            self.Chart_1.addItem(avg_line)
+
+            # 최대 파라미터2 계산
+            max_parameter2 = max(self.y2_data)
+
+            # 최대 파라미터2 지점에 빨간 가로줄 추가
+            max_line = pg.InfiniteLine(
+                pos=max_parameter2,
+                angle=0,  # 수평선
+                pen=pg.mkPen(color='red', width=1, style=pg.QtCore.Qt.DashLine)
+            )
+            self.Chart_2.addItem(max_line)
+
+            # 평균 파라미터2 계산
+            avg_parameter2 = sum(self.y2_data) / len(self.y2_data)
+
+            # 평균 파라미터2 지점에 파란 점선 추가
+            avg_line = pg.InfiniteLine(
+                pos=avg_parameter2,
+                angle=0,  # 수평선
+                pen=pg.mkPen(color=QtGui.QColor(255, 179, 0), width=1, style=pg.QtCore.Qt.DashLine)
+            )
+            self.Chart_2.addItem(avg_line)
+
+            parameter1_array = np.array(self.y_data)
+            Effective_value1 = 10  # 데이터10 이상을 유효 구간으로 간주
+
+            # 유효 추력 시작/끝 인덱스 구하기
+            valid_indices = np.where(parameter1_array > Effective_value1)[0]
+            if len(valid_indices) > 0:
+                start_idx = valid_indices[0]
+                end_idx = valid_indices[-1]
+                x_valid_start = self.x_data[start_idx]
+                x_valid_end = self.x_data[end_idx]
+
+                # 평균, 최대값 좌표도 유효 구간에 맞춰 텍스트 배치
+                chart1_pos = x_valid_end - (x_valid_end - x_valid_start) * 0.1  # 유효 구간 끝에서 10% 안쪽
+
+            parameter2_array = np.array(self.y2_data)
+            Effective_value2 = 1  # 데이터 1 이상을 유효 구간으로 간주
+
+            # 유효 추력 시작/끝 인덱스 구하기
+            valid_indices = np.where(parameter2_array > Effective_value2)[0]
+            if len(valid_indices) > 0:
+                start_idx = valid_indices[0]
+                end_idx = valid_indices[-1]
+                x_valid_start = self.x_data[start_idx]
+                x_valid_end = self.x_data[end_idx]
+
+                # 평균, 최대값 좌표도 유효 구간에 맞춰 텍스트 배치
+                chart2_pos = x_valid_end - (x_valid_end - x_valid_start) * 0  # 유효 구간 끝에서 10% 안쪽
+
+
+
+            # 텍스트 아이템 추가: 최대 파라미터1값
+            max_text = pg.TextItem(text=f"최대값 (실제 값과 다를수 있음!)\n{max_parameter1:.3f}", color=QtGui.QColor(216, 0, 68), anchor=(0, 0.5))
+            max_text.setPos(chart1_pos, max_parameter1)
+            self.Chart_1.addItem(max_text)
+
+            # 텍스트 아이템 추가: 평균 파라미터1값
+            avg_text = pg.TextItem(text=f"평균값 (실제 값과 다를수 있음!)\n{avg_parameter1:.3f}", color=QtGui.QColor(255, 179, 0), anchor=(0, 0.5))
+            avg_text.setPos(chart1_pos, avg_parameter1)
+            self.Chart_1.addItem(avg_text)
+
+            # 텍스트 아이템 추가: 최대 파라미터2값
+            max_text = pg.TextItem(text=f"최대값 (실제 값과 다를수 있음!)\n{max_parameter2:.3f}", color=QtGui.QColor(216, 0, 68), anchor=(0, 0.5))
+            max_text.setPos(chart2_pos, max_parameter2)
+            self.Chart_2.addItem(max_text)
+
+            # 텍스트 아이템 추가: 평균 파라미터2값
+            avg_text = pg.TextItem(text=f"평균값 (실제 값과 다를수 있음!)\n{avg_parameter2:.3f}", color=QtGui.QColor(255, 179, 0), anchor=(0, 0.5))
+            avg_text.setPos(chart2_pos, avg_parameter2)
+            self.Chart_2.addItem(avg_text)
+
+
+
 
         except Exception as e:
             print(f"signal 처리 중 오류: {e}")
@@ -2477,7 +2630,175 @@ class Ui_MainWindow(object):
         self.confirm_text1.hide()
 
     def HW_Check(self):
-        print("HW_Check")
+        self.x_data = []
+        self.y_data = []
+        self.y2_data = []
+        
+        # 가상 데이터 생성
+        # 비어있던 데이터에 가상 데이터를 할당
+        self.x_data = np.linspace(0, 5, 1000)
+        self.y_data = np.piecewise(
+            self.x_data,
+            [self.x_data < 0.2, (0.2 <= self.x_data) & (self.x_data < 3.5), self.x_data >= 3.5],
+            [
+                lambda x: 500 * (x / 0.2),         # 급상승 (점화 구간)
+                lambda x: 500,                     # 유지 구간
+                lambda x: 500 * np.exp(-5*(x - 3.5))  # 연소 종료 감쇠
+            ]
+        )
+        self.y2_data = np.piecewise(
+            self.x_data,
+            [self.x_data < 0.2, (0.2 <= self.x_data) & (self.x_data < 3.5), self.x_data >= 3.5],
+            [
+                lambda x: 4 * (x / 0.2),         # 급상승 (점화 구간)
+                lambda x: 4,                     # 유지 구간
+                lambda x: 4 * np.exp(-5*(x - 3.5))  # 연소 종료 감쇠
+            ]
+        )    
+
+        # 그래프 클리어 후 그리기
+        self.Chart_1.clear()
+        self.Chart_1.plot(self.x_data, self.y_data)
+
+        
+        
+        pen = pg.mkPen(color=(0, 200, 255), width=2)
+
+        gradient = QtGui.QLinearGradient(0, 0, 0, 1000)  # y=0 ~ y=10 구간에서 그라데이션
+        gradient.setCoordinateMode(QtGui.QGradient.LogicalMode)
+        gradient.setColorAt(1.0, QtGui.QColor(0, 200, 255, 200))    # 위쪽
+        gradient.setColorAt(0.0, QtGui.QColor(0, 200, 255, 0))  # 아래쪽
+
+        brush = QtGui.QBrush(gradient)
+
+
+
+        self.Chart_1.plot(
+            self.x_data, self.y_data,
+            pen=pen,
+            fillLevel=0,        # y=0을 기준으로 아래를 채움
+            brush=brush         # 채우는 색
+        )
+
+        # 압력 그래프 (Chart_2)
+        self.Chart_2.clear()
+        self.Chart_2.plot(self.x_data, self.y2_data)
+
+        pen = pg.mkPen(color=(255, 24, 116), width=2)
+
+        gradient = QtGui.QLinearGradient(0, 0, 0, 10)  # y=0 ~ y=10 구간에서 그라데이션
+        gradient.setCoordinateMode(QtGui.QGradient.LogicalMode)
+        gradient.setColorAt(1.0, QtGui.QColor(216, 0, 68, 200))    # 위쪽rgb(216, 0, 68)  QtGui.QColor(216, 0, 68) QtGui.QColor(0, 200, 255
+        gradient.setColorAt(0.0, QtGui.QColor(216, 0, 68, 0))  # 아래쪽
+
+        brush = QtGui.QBrush(gradient)
+        
+        self.Chart_2.plot(
+            self.x_data, self.y2_data,
+            pen=pen,
+            fillLevel=0,        # y=0을 기준으로 아래를 채움
+            brush=brush         # 채우는 색
+        )
+        for y_value in [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600]:
+            line = pg.InfiniteLine(pos=y_value, angle=0, pen=pg.mkPen((150, 150, 150), width=0.3))
+            self.Chart_1.addItem(line)
+        for y_value in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5]:
+            line = pg.InfiniteLine(pos=y_value, angle=0, pen=pg.mkPen((150, 150, 150), width=0.3))
+            self.Chart_2.addItem(line)
+
+        # 최대 파라미터1 계산
+        max_parameter1 = max(self.y_data)
+
+        # 최대 파라미터1 지점에 빨간 가로줄 추가
+        max_line = pg.InfiniteLine(
+            pos=max_parameter1,
+            angle=0,  # 수평선
+            pen=pg.mkPen(color='red', width=1, style=pg.QtCore.Qt.DashLine)
+        )
+        self.Chart_1.addItem(max_line)
+
+        # 평균 파라미터1 계산
+        avg_parameter1 = sum(self.y_data) / len(self.y_data)
+
+        # 평균 파라미터1 지점에 파란 점선 추가
+        avg_line = pg.InfiniteLine(
+            pos=avg_parameter1,
+            angle=0,  # 수평선
+            pen=pg.mkPen(color=QtGui.QColor(255, 179, 0), width=1, style=pg.QtCore.Qt.DashLine)
+        )
+        self.Chart_1.addItem(avg_line)
+
+         # 최대 파라미터2 계산
+        max_parameter2 = max(self.y2_data)
+
+        # 최대 파라미터2 지점에 빨간 가로줄 추가
+        max_line = pg.InfiniteLine(
+            pos=max_parameter2,
+            angle=0,  # 수평선
+            pen=pg.mkPen(color='red', width=1, style=pg.QtCore.Qt.DashLine)
+        )
+        self.Chart_2.addItem(max_line)
+
+        # 평균 파라미터2 계산
+        avg_parameter2 = sum(self.y2_data) / len(self.y2_data)
+
+        # 평균 파라미터2 지점에 파란 점선 추가
+        avg_line = pg.InfiniteLine(
+            pos=avg_parameter2,
+            angle=0,  # 수평선
+            pen=pg.mkPen(color=QtGui.QColor(255, 179, 0), width=1, style=pg.QtCore.Qt.DashLine)
+        )
+        self.Chart_2.addItem(avg_line)
+
+        parameter1_array = np.array(self.y_data)
+        Effective_value1 = 10  # 데이터10 이상을 유효 구간으로 간주
+
+        # 유효 추력 시작/끝 인덱스 구하기
+        valid_indices = np.where(parameter1_array > Effective_value1)[0]
+        if len(valid_indices) > 0:
+            start_idx = valid_indices[0]
+            end_idx = valid_indices[-1]
+            x_valid_start = self.x_data[start_idx]
+            x_valid_end = self.x_data[end_idx]
+
+            # 평균, 최대값 좌표도 유효 구간에 맞춰 텍스트 배치
+            chart1_pos = x_valid_end - (x_valid_end - x_valid_start) * 0.1  # 유효 구간 끝에서 10% 안쪽
+
+        parameter2_array = np.array(self.y2_data)
+        Effective_value2 = 1  # 데이터 1 이상을 유효 구간으로 간주
+
+        # 유효 추력 시작/끝 인덱스 구하기
+        valid_indices = np.where(parameter2_array > Effective_value2)[0]
+        if len(valid_indices) > 0:
+            start_idx = valid_indices[0]
+            end_idx = valid_indices[-1]
+            x_valid_start = self.x_data[start_idx]
+            x_valid_end = self.x_data[end_idx]
+
+            # 평균, 최대값 좌표도 유효 구간에 맞춰 텍스트 배치
+            chart2_pos = x_valid_end - (x_valid_end - x_valid_start) * 0  # 유효 구간 끝에서 10% 안쪽
+
+
+
+        # 텍스트 아이템 추가: 최대 파라미터1값
+        max_text = pg.TextItem(text=f"최대값 (실제 값과 다를수 있음!)\n{max_parameter1:.3f}", color=QtGui.QColor(216, 0, 68), anchor=(0, 0.5))
+        max_text.setPos(chart1_pos, max_parameter1)
+        self.Chart_1.addItem(max_text)
+
+        # 텍스트 아이템 추가: 평균 파라미터1값
+        avg_text = pg.TextItem(text=f"평균값 (실제 값과 다를수 있음!)\n{avg_parameter1:.3f}", color=QtGui.QColor(255, 179, 0), anchor=(0, 0.5))
+        avg_text.setPos(chart1_pos, avg_parameter1)
+        self.Chart_1.addItem(avg_text)
+
+        # 텍스트 아이템 추가: 최대 파라미터2값
+        max_text = pg.TextItem(text=f"최대값 (실제 값과 다를수 있음!)\n{max_parameter2:.3f}", color=QtGui.QColor(216, 0, 68), anchor=(0, 0.5))
+        max_text.setPos(chart2_pos, max_parameter2)
+        self.Chart_2.addItem(max_text)
+
+        # 텍스트 아이템 추가: 평균 파라미터2값
+        avg_text = pg.TextItem(text=f"평균값 (실제 값과 다를수 있음!)\n{avg_parameter2:.3f}", color=QtGui.QColor(255, 179, 0), anchor=(0, 0.5))
+        avg_text.setPos(chart2_pos, avg_parameter2)
+        self.Chart_2.addItem(avg_text)
 
     def Manual_Ignition(self):
         global I_S
