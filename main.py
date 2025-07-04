@@ -61,9 +61,16 @@ abort = 0 #비행 중단 확인
 t = 0 # 시퀀스 기본 시간
 t_set = 0 # 시퀀스 선택 시간
 sequence = 0 # 시퀀스 진행 확인
-I_S = 0 # 수동 점화 = 0 , 시퀀스 시작 = 1
+I_S = 3 # 수동 점화 = 0 , 시퀀스 시작 = 1 , 데이터 리셋 = 2
 intro_exit = 0 # 인트로 화면 확인
 sim_ig = 0 # 시뮬레이션 모드 점화 확인
+
+re_seq_count = 1
+
+avg_parameter1_2 = 0
+avg_parameter2_2 = 0
+max_parameter1 = 0
+max_parameter2 = 0
 
 pygame.init()
 pygame.mixer.init()
@@ -181,7 +188,7 @@ class Ui_MainWindow(object):
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.setFixedSize(1281, 721)
-        MainWindow.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(25, 25, 25, 255), stop:1 rgba(105, 105, 105, 255));")
+        MainWindow.setStyleSheet("background-color: rgb(30, 30, 30);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.Sequence_time_text = QtWidgets.QLabel(self.centralwidget)
@@ -215,6 +222,7 @@ class Ui_MainWindow(object):
         self.parameter1_box.setObjectName("parameter1_box")
         self.parameter1_text2 = QtWidgets.QLabel(self.centralwidget)
         self.parameter1_text2.setGeometry(QtCore.QRect(1000, 640, 31, 20))
+        
 
         self.gauge_r = QtWidgets.QLabel(self.centralwidget)
         self.gauge_r.setGeometry(QtCore.QRect(930, 520, 170, 170))
@@ -499,7 +507,7 @@ class Ui_MainWindow(object):
         self.Flight_interface_ModeUP_btn5.setAlignment(QtCore.Qt.AlignCenter)
         self.Flight_interface_ModeUP_btn5.setObjectName("Flight_interface_ModeUP_btn5")
         self.Control_box = QtWidgets.QLabel(self.centralwidget)
-        self.Control_box.setGeometry(QtCore.QRect(24, 529, 263, 93))
+        self.Control_box.setGeometry(QtCore.QRect(24, 529, 561, 93))
         font = QtGui.QFont()
         font.setFamily("AppleSDGothicNeoSB00")
         font.setPointSize(11)
@@ -622,6 +630,62 @@ class Ui_MainWindow(object):
         self.Program_Info_btn.setScaledContents(True)
         self.Program_Info_btn.setAlignment(QtCore.Qt.AlignCenter)
         self.Program_Info_btn.setObjectName("Program_Info_btn")
+        
+        self.step = QtWidgets.QLabel(self.centralwidget)
+        self.step.setGeometry(QtCore.QRect(305, 580, 250, 34))
+        self.step.setFont(font)
+        self.step.setStyleSheet("background-color: rgb(0, 0, 0, 0);\n")
+        self.step.setText("")
+        step_img = Path(__file__).parent / "img" / "step" / "step_1_1.png"
+        self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+        self.step.setScaledContents(True)
+        self.step.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.step.setObjectName("step")
+
+        self.data_reset_btn = ClickableLabel(self.centralwidget)
+        self.data_reset_btn.setGeometry(QtCore.QRect(287, 540, 70, 30))
+        self.data_reset_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.data_reset_btn.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.data_reset_btn.setText("")
+        logo_img_path = Path(__file__).parent / "img" / "data_reset_btn.png"
+        self.data_reset_btn.setPixmap(QtGui.QPixmap(str(logo_img_path)))
+        self.data_reset_btn.setScaledContents(True)
+        self.data_reset_btn.setAlignment(QtCore.Qt.AlignCenter)
+        self.data_reset_btn.setObjectName("data_reset_btn")
+
+        self.seq_t_plus10_btn = ClickableLabel(self.centralwidget)
+        self.seq_t_plus10_btn.setGeometry(QtCore.QRect(360, 540, 70, 30))
+        self.seq_t_plus10_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.seq_t_plus10_btn.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.seq_t_plus10_btn.setText("")
+        logo_img_path = Path(__file__).parent / "img" / "seq_t+10_btn.png"
+        self.seq_t_plus10_btn.setPixmap(QtGui.QPixmap(str(logo_img_path)))
+        self.seq_t_plus10_btn.setScaledContents(True)
+        self.seq_t_plus10_btn.setAlignment(QtCore.Qt.AlignCenter)
+        self.seq_t_plus10_btn.setObjectName("seq_t_plus10_btn")
+
+        self.seq_t_minus10_btn = ClickableLabel(self.centralwidget)
+        self.seq_t_minus10_btn.setGeometry(QtCore.QRect(433, 540, 70, 30))
+        self.seq_t_minus10_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.seq_t_minus10_btn.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.seq_t_minus10_btn.setText("")
+        logo_img_path = Path(__file__).parent / "img" / "seq_t-10_btn.png"
+        self.seq_t_minus10_btn.setPixmap(QtGui.QPixmap(str(logo_img_path)))
+        self.seq_t_minus10_btn.setScaledContents(True)
+        self.seq_t_minus10_btn.setAlignment(QtCore.Qt.AlignCenter)
+        self.seq_t_minus10_btn.setObjectName("seq_t_minus10_btn")
+
+        self.re_seq_btn = ClickableLabel(self.centralwidget)
+        self.re_seq_btn.setGeometry(QtCore.QRect(506, 540, 70, 30))
+        self.re_seq_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.re_seq_btn.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.re_seq_btn.setText("")
+        logo_img_path = Path(__file__).parent / "img" / "re_seq_btn.png"
+        self.re_seq_btn.setPixmap(QtGui.QPixmap(str(logo_img_path)))
+        self.re_seq_btn.setScaledContents(True)
+        self.re_seq_btn.setAlignment(QtCore.Qt.AlignCenter)
+        self.re_seq_btn.setObjectName("re_seq_btn")
+
         self.parameter2_text1 = QtWidgets.QLabel(self.centralwidget)
         self.parameter2_text1.setGeometry(QtCore.QRect(1140, 580, 71, 20))
         font = QtGui.QFont()
@@ -1256,6 +1320,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(255, 255, 255, 200);")
         self.Chart_2.setObjectName("Chart_2")
         self.Chart_1 = pg.PlotWidget(MainWindow, title="Thrust") 
+        
         self.Chart_1.setGeometry(QtCore.QRect(210, 180, 341, 311))
         self.Chart_1.setStyleSheet("border-radius :13px;\n"
 "background-color: rgb(255, 255, 255, 200);")
@@ -1423,6 +1488,8 @@ class Ui_MainWindow(object):
         self.intro_img.setObjectName("intro_img")
         self.back_grad_up.raise_()
         self.back_grad_down.raise_()
+        self.Program_Info_Logo.raise_()
+        self.Program_Info_Logo.hide()
         self.Control_box.hide()
         self.Control_HWCheck_btn4.raise_()
         self.terminal_Box.raise_()
@@ -1472,6 +1539,10 @@ class Ui_MainWindow(object):
         self.Control_1ignition_btn3.raise_()
         self.Control_HWCheck_btn1.hide()
         self.Program_Info_btn.raise_()
+        self.seq_t_plus10_btn.raise_()
+        self.seq_t_minus10_btn.raise_()
+        self.re_seq_btn.raise_()
+        self.data_reset_btn.raise_()
         self.parameter2_text1.raise_()
         self.parameter2_text2.raise_()
         self.parameter2_main.raise_()
@@ -1501,6 +1572,7 @@ class Ui_MainWindow(object):
         self.gauge_r.raise_()
         self.gauge_b.raise_()
         self.Chart_box_2.raise_()
+        self.step.raise_()
 
         self.intro_img_2.raise_()
         self.intro_HW_main.raise_()
@@ -1511,21 +1583,38 @@ class Ui_MainWindow(object):
         self.intro_HW_img.raise_()
         self.intro_img.raise_()
 
+        self.Program_Info_Box.raise_()
+        self.Program_Info_Text1.raise_()
+        self.Program_Info_Text2.raise_()
+        self.Program_Info_Text3.raise_()
+        self.Program_Info_Text6.raise_()
+        self.Program_Info_Text4.raise_()
+        self.Program_Info_Text5.raise_()
+        self.Program_Info_Logo.raise_()
+
         self.Program_Info_Box.hide()
         self.Program_Info_Text1.hide()
         self.Program_Info_Text2.hide()
-        self.Program_Info_Logo.hide()
         self.Program_Info_Text3.hide()
         self.Program_Info_Text6.hide()
         self.Program_Info_Text4.hide()
         self.Program_Info_Text5.hide()
+        self.Program_Info_Logo.hide()
+        self.step.hide()
 
 
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        self.re_seq_btn.clicked.connect(self.seq_reset)
         
+        self.seq_t_minus10_btn.clicked.connect(self.seq_tm10)
+        self.seq_t_plus10_btn.clicked.connect(self.seq_tp10)
+
+
+
         self.intro_strart_btn1.clicked.connect(self.intro_exit)
         self.intro_strart_btn2.clicked.connect(self.intro_exit)
         self.intro_strart_btn3.clicked.connect(self.intro_exit)
@@ -1559,6 +1648,7 @@ class Ui_MainWindow(object):
         self.Flight_interface_ModeUP_btn5.clicked.connect(self.Mode_chage_btn)
         self.Flight_interface_ModeDN_btn5.clicked.connect(self.Mode_chage_btn)
         self.Program_Info_btn.clicked.connect(self.program_info)
+        self.data_reset_btn.clicked.connect(self.data_reset)
         
         self.Control_1ignition_btn1.clicked.connect(self.Manual_Ignition)
         self.Control_1ignition_btn2.clicked.connect(self.Manual_Ignition)
@@ -1641,6 +1731,8 @@ class Ui_MainWindow(object):
     def intro_exit(self):
         global intro_exit
         _translate = QtCore.QCoreApplication.translate
+        t = t_set
+        self.Sequence_time_text.setText(_translate("Dialog", f"T-{t}"))
         current_time = datetime.now().strftime("%Y-%m-%d %H")[:-3]
         self.log_entry = f"{current_time} 의 데이터 - Logging initiated\n"
         self.log_entry += "↓ data ↓\n"
@@ -1663,6 +1755,11 @@ class Ui_MainWindow(object):
         self.Abort_btn3.hide()
         self.Abort_Box.hide()
         self.Abort_text.hide()
+
+        self.data_reset_btn.hide()
+        self.seq_t_plus10_btn.hide()
+        self.seq_t_minus10_btn.hide()
+        self.re_seq_btn.hide()
 
         self.Control_confirm_btn2.hide()
         self.Control_Sequence_btn3.hide()
@@ -1703,6 +1800,7 @@ class Ui_MainWindow(object):
             #시리얼 통신부( 아두이노 없어서 잠시 주석 처리 )
             self.serial_reader_thread = SerialReaderThread(self.ser)
             self.serial_reader_thread.new_data_signal.connect(self.signal)
+            self.serial_reader_thread.new_data_signal.connect(self.signal_graph)
             self.serial_reader_thread.new_data_signal.connect(self.gauge)
             self.serial_reader_thread.start()
 
@@ -1800,6 +1898,11 @@ class Ui_MainWindow(object):
                 self.Control_confirm_btn2.hide()
                 self.Control_Sequence_btn3.hide()
                 self.Control_Sequence_btn4.hide()
+                self.data_reset_btn.hide()
+                self.seq_t_plus10_btn.hide()
+                self.seq_t_minus10_btn.hide()
+                self.re_seq_btn.hide()
+                self.step.hide()
             else:
                 mode_count = 1
                 mode_DN_img_path = Path(__file__).parent / "img" / "mode_down.png"
@@ -1952,6 +2055,11 @@ class Ui_MainWindow(object):
         global control_count
         if control_count == 1:
             control_count = 0
+            self.data_reset_btn.hide()
+            self.seq_t_plus10_btn.hide()
+            self.seq_t_minus10_btn.hide()
+            self.re_seq_btn.hide()
+            self.step.hide()
             self.Control_box.hide()
             self.Control_HWCheck_btn1.hide()
             self.Control_HWCheck_btn2.hide()
@@ -1981,7 +2089,12 @@ class Ui_MainWindow(object):
                 self.Mode_Flight_btn3.hide()
                 self.Mode_Flight_btn2.hide()
                 self.Mode_TMS_btn2.hide()
+                self.data_reset_btn.show()
+                self.seq_t_plus10_btn.show()
+                self.seq_t_minus10_btn.show()
+                self.re_seq_btn.show()
                 self.Control_box.show()
+                self.step.show()
                 self.Control_HWCheck_btn1.show()
                 self.Control_HWCheck_btn2.show()
                 self.Control_HWCheck_btn3.show()
@@ -1996,7 +2109,12 @@ class Ui_MainWindow(object):
                 self.Control_Sequence_btn4.show()
             else:
                 control_count = 1
+                self.data_reset_btn.show()
+                self.seq_t_plus10_btn.show()
+                self.seq_t_minus10_btn.show()
+                self.re_seq_btn.show()
                 self.Control_box.show()
+                self.step.show()
                 self.Control_HWCheck_btn1.show()
                 self.Control_HWCheck_btn2.show()
                 self.Control_HWCheck_btn3.show()
@@ -2042,6 +2160,7 @@ class Ui_MainWindow(object):
         else:
             if safty_count == 1:
                 safty_count = 0
+
                 unsafty_img_path = Path(__file__).parent / "img" / "safty_unlocked.png"
                 self.Flight_interface_Safty_btn.setPixmap(QtGui.QPixmap(str(unsafty_img_path)))
                 self.feedback_Title.setText(_translate("MainWindow", "Un Safty"))
@@ -2114,6 +2233,47 @@ class Ui_MainWindow(object):
         self.confirm_exit_btn.hide()
         self.confirm_text1.hide()
 
+    def data_reset(self):
+
+        global I_S
+        global chart_count
+        _translate = QtCore.QCoreApplication.translate
+        if safty_count == 1:
+            self.feedback_Title.setText(_translate("MainWindow", "Safty MODE"))
+            self.feedback_Info.setText(_translate("MainWindow", "안전 모드가 활성화 중입니다!"))
+            current_time_2 = datetime.now().strftime("%H:%M")
+            self.feedback_time.setText(_translate("MainWindow", current_time_2))
+            self.feedback_Title.show()
+            self.feedback_logo.show()
+            self.feedback_Info.show()
+            self.feedback_Box.show()
+            self.feedback_time.show()
+            QTest.qWait(3000)
+            self.feedback_Title.hide()
+            self.feedback_logo.hide()
+            self.feedback_Info.hide()
+            self.feedback_Box.hide()
+            self.feedback_time.hide()
+        else:
+            I_S = 2
+            self.Chart_box.hide()
+            self.Chart_3.hide()
+            self.Chart_2.hide()
+            self.Chart_1.hide()
+            chart_count = 0
+            self.confirm_text1.setText(_translate("MainWindow", "주의!"))
+            self.confirm_text2.setText(_translate("MainWindow", "데이터를 정말 초기화하시겠습니까?"))
+            data_reset_img_path = Path(__file__).parent / "img" / "cauntion.png"
+            self.confirm_logo.setPixmap(QtGui.QPixmap(str(data_reset_img_path)))
+            self.confirm_btn1.show()
+            self.confirm_btn2.show()
+            self.confirm_box.show()
+            self.confirm_logo.show()
+            self.confirm_text2.show()
+            self.confirm_exit_btn.show()
+            self.confirm_text1.show()
+        
+
     def terminal(self):
         global chart_count
         global terminal_count
@@ -2155,16 +2315,22 @@ class Ui_MainWindow(object):
     def gauge(self, data):
         data_list = data.split(',')
         parameter1_data_g = float(data_list[0]) * 9.8  # 추력 (N)
-        parameter2_data_g = float(data_list[1])  # 압력 (MPa)
+        parameter2_data_g = float(data_list[1])        # 압력 (MPa)
 
-        # 추력값을 기반으로 이미지 인덱스 계산 (1~20)
-        index_R = min(int(parameter1_data_g // 25) + 1, 20)
+        # 추력값이 0보다 작으면 인덱스 1
+        if parameter1_data_g < 0:
+            index_R = 1
+        else:
+            index_R = min(int(parameter1_data_g // 25) + 1, 20)
 
-        # 압력값을 기반으로 이미지 인덱스 계산 (1~20)
-        index_B = min(round(parameter2_data_g / 0.3), 20)
-        index_B = max(index_B, 1)  # 최소값 1 보장
+        # 압력값이 0보다 작으면 인덱스 1
+        if parameter2_data_g < 0:
+            index_B = 1
+        else:
+            index_B = min(round(parameter2_data_g / 0.3), 20)
+            index_B = max(index_B, 1)  # 최소값 보장
 
-        # 파일명 포맷: Gauge_B_01.png ~ Gauge_B_20.png
+        # 파일명 포맷: Gauge_R_01.png ~ Gauge_R_20.png
         filename_r = f"Gauge_R_{index_R:02d}.png"
         gauge_r_img = Path(__file__).parent / "img" / "gauge" / filename_r
         self.gauge_r.setPixmap(QtGui.QPixmap(str(gauge_r_img)))
@@ -2174,219 +2340,250 @@ class Ui_MainWindow(object):
         gauge_b_img = Path(__file__).parent / "img" / "gauge" / filename_b
         self.gauge_b.setPixmap(QtGui.QPixmap(str(gauge_b_img)))
 
-    def signal(self, data):
-        _translate = QtCore.QCoreApplication.translate
+    def signal_graph(self, data):
 
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-        print(f"[{current_time}] Received data: {data}")
-        self.flight_data_text.setText(f"[{current_time}]:{data}")
-        self.log_entry += f"[{current_time}] Received data: {data}\n"
-        self.terminal_main.append(f"[{current_time}]:{data}")
-        
+        global avg_parameter1_2
+        global avg_parameter2_2
+        global max_parameter1
+        global max_parameter2
+
+        chart1_pos = 0
+        chart2_pos = 0
+
+        if not hasattr(self, "frame_count"):
+            self.frame_count = 0
+        self.frame_count += 1
+        if self.frame_count % 5 != 0:
+            return  # 3 프레임 중 1번만 그래프 갱신
+
         try:
             data_list = data.split(',')
-            parameter1_data = float(data_list[0]) * 9.8  # 추력 (N)
-            parameter2_data = float(data_list[1])        # 압력 (Mpa)
-            igniton_singal = int(data_list[4])
+            parameter1_g_data = float(data_list[0]) * 9.8  # 추력 (N)
+            parameter2_g_data = float(data_list[1])        # 압력 (Mpa)
 
-            self.parameter1_main.setText(_translate("MainWindow", f"{parameter1_data:.1f}"))
-            self.parameter2_main.setText(_translate("MainWindow", f"{parameter2_data:.2f}"))
-
-            # 그래프용 데이터 초기화
             if not hasattr(self, "x_data"):
                 self.x_data = []
                 self.y_data = []
                 self.y2_data = []
                 self.start_time = time.time()
 
-            if igniton_singal == 1:
-                def hide_feedback():
-                    self.feedback_Title.hide()
-                    self.feedback_logo.hide()
-                    self.feedback_Info.hide()
-                    self.feedback_Box.hide()
-                    self.feedback_time.hide()
-                    self.flight_info_text.setText(_translate("MainWindow", "Normal"))
-                print("ignition_signal")
-                self.flight_info_text.setText(_translate("MainWindow", "IGNITION 신호 확인"))
-                self.feedback_Title.setText(_translate("MainWindow", "점화"))
-                self.feedback_Info.setText(_translate("MainWindow", "점화 신호가 확인되었습니다!"))
-                current_time_2 = datetime.now().strftime("%H:%M")
-                self.feedback_time.setText(_translate("MainWindow", current_time_2))
-                self.feedback_Title.show()
-                self.feedback_logo.show()
-                self.feedback_Info.show()
-                self.feedback_Box.show()
-                self.feedback_time.show()
-                
-                QTimer.singleShot(3000, hide_feedback)
+            if parameter1_g_data > 500 or parameter1_g_data < -100:
+                print(f" 이상 센서 값 감지: {parameter1_g_data:.1f}N → 0N 처리됨")
+                parameter1_g_data = 0
+            elif parameter1_g_data < 0:
+                parameter1_g_data = 0
 
-            if parameter1_data > 500:
-                        print(f" 이상 센서 값 감지: {parameter1_data:.1f}N → 0N 처리됨")
-                        parameter1_data = 0
-
-            elif parameter1_data < -100:
-                        print(f" 이상 센서 값 감지: {parameter1_data:.1f}N → 0N 처리됨")
-                        parameter1_data = 0
-
-            elif parameter1_data < 0:
-                        parameter1_data = 0
-                        
             time_passed = time.time() - self.start_time
             self.x_data.append(time_passed)
-            self.y_data.append(parameter1_data)
-            self.y2_data.append(parameter2_data)
+            self.y_data.append(parameter1_g_data)
+            self.y2_data.append(parameter2_g_data)
 
-            # 그래프 클리어 후 그리기
             self.Chart_1.clear()
-            self.Chart_1.plot(self.x_data, self.y_data)
-
             pen = pg.mkPen(color=(0, 200, 255), width=2)
-
-            gradient = QtGui.QLinearGradient(0, 0, 0, 1000)  # y=0 ~ y=10 구간에서 그라데이션
+            gradient = QtGui.QLinearGradient(0, 0, 0, 1000)
             gradient.setCoordinateMode(QtGui.QGradient.LogicalMode)
-            gradient.setColorAt(1.0, QtGui.QColor(0, 200, 255, 200))    # 위쪽
-            gradient.setColorAt(0.0, QtGui.QColor(0, 200, 255, 0))  # 아래쪽
-
+            gradient.setColorAt(1.0, QtGui.QColor(0, 200, 255, 250))
+            gradient.setColorAt(0.0, QtGui.QColor(0, 200, 255, 0))
             brush = QtGui.QBrush(gradient)
+            self.Chart_1.plot(self.x_data, self.y_data, pen=pen, fillLevel=0, brush=brush)
 
-            self.Chart_1.plot(
-                self.x_data, self.y2_data,
-                pen=pen,
-                fillLevel=0,        # y=0을 기준으로 아래를 채움
-                brush=brush         # 채우는 색
-            )
-
-            # 압력 그래프 (Chart_2)
             self.Chart_2.clear()
-            self.Chart_2.plot(self.x_data, self.y2_data)
-
             pen = pg.mkPen(color=(255, 24, 116), width=2)
-
-            gradient = QtGui.QLinearGradient(0, 0, 0, 10)  # y=0 ~ y=10 구간에서 그라데이션
+            gradient = QtGui.QLinearGradient(0, 0, 0, 10)
             gradient.setCoordinateMode(QtGui.QGradient.LogicalMode)
-            gradient.setColorAt(1.0, QtGui.QColor(216, 0, 68, 200))    # 위쪽rgb(255, 24, 116)
-            gradient.setColorAt(0.0, QtGui.QColor(216, 0, 68, 0))  # 아래쪽
-
+            gradient.setColorAt(1.0, QtGui.QColor(216, 0, 68, 250))
+            gradient.setColorAt(0.0, QtGui.QColor(216, 0, 68, 0))
             brush = QtGui.QBrush(gradient)
-            
-            self.Chart_2.plot(
-                self.x_data, self.y_data,
-                pen=pen,
-                fillLevel=0,        # y=0을 기준으로 아래를 채움
-                brush=brush         # 채우는 색
-            )
+            self.Chart_2.plot(self.x_data, self.y2_data, pen=pen, fillLevel=0, brush=brush)
 
-            for y_value in [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600]:
-                line = pg.InfiniteLine(pos=y_value, angle=0, pen=pg.mkPen((150, 150, 150), width=0.3))
-                self.Chart_1.addItem(line)
-            for y_value in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5]:
-                line = pg.InfiniteLine(pos=y_value, angle=0, pen=pg.mkPen((150, 150, 150), width=0.3))
-                self.Chart_2.addItem(line)
+            for y in [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600]:
+                self.Chart_1.addItem(pg.InfiniteLine(pos=y, angle=0, pen=pg.mkPen((150, 150, 150), width=0.3)))
+            for y in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5]:
+                self.Chart_2.addItem(pg.InfiniteLine(pos=y, angle=0, pen=pg.mkPen((150, 150, 150), width=0.3)))
 
-
-
-
-
-            # 최대 파라미터1 계산
             max_parameter1 = max(self.y_data)
-
-            # 최대 파라미터1 지점에 빨간 가로줄 추가
-            max_line = pg.InfiniteLine(
-                pos=max_parameter1,
-                angle=0,  # 수평선
-                pen=pg.mkPen(color='red', width=1, style=pg.QtCore.Qt.DashLine)
-            )
-            self.Chart_1.addItem(max_line)
-
-            # 평균 파라미터1 계산
-            avg_parameter1 = sum(self.y_data) / len(self.y_data)
-
-            # 평균 파라미터1 지점에 파란 점선 추가
-            avg_line = pg.InfiniteLine(
-                pos=avg_parameter1,
-                angle=0,  # 수평선
-                pen=pg.mkPen(color=QtGui.QColor(255, 179, 0), width=1, style=pg.QtCore.Qt.DashLine)
-            )
-            self.Chart_1.addItem(avg_line)
-
-            # 최대 파라미터2 계산
-            max_parameter2 = max(self.y2_data)
-
-            # 최대 파라미터2 지점에 빨간 가로줄 추가
-            max_line = pg.InfiniteLine(
-                pos=max_parameter2,
-                angle=0,  # 수평선
-                pen=pg.mkPen(color='red', width=1, style=pg.QtCore.Qt.DashLine)
-            )
-            self.Chart_2.addItem(max_line)
-
-            # 평균 파라미터2 계산
-            avg_parameter2 = sum(self.y2_data) / len(self.y2_data)
-
-            # 평균 파라미터2 지점에 파란 점선 추가
-            avg_line = pg.InfiniteLine(
-                pos=avg_parameter2,
-                angle=0,  # 수평선
-                pen=pg.mkPen(color=QtGui.QColor(255, 179, 0), width=1, style=pg.QtCore.Qt.DashLine)
-            )
-            self.Chart_2.addItem(avg_line)
+            self.Chart_1.addItem(pg.InfiniteLine(pos=max_parameter1, angle=0, pen=pg.mkPen(color='red', width=1, style=pg.QtCore.Qt.DashLine)))
 
             parameter1_array = np.array(self.y_data)
-            Effective_value1 = 10  # 데이터10 이상을 유효 구간으로 간주
-
-            # 유효 추력 시작/끝 인덱스 구하기
+            Effective_value1 = 10
             valid_indices = np.where(parameter1_array > Effective_value1)[0]
             if len(valid_indices) > 0:
-                start_idx = valid_indices[0]
-                end_idx = valid_indices[-1]
-                x_valid_start = self.x_data[start_idx]
-                x_valid_end = self.x_data[end_idx]
+                start_idx, end_idx = valid_indices[0], valid_indices[-1]
+                avg_parameter1_2 = np.mean(parameter1_array[start_idx:end_idx + 1])
+                self.Chart_1.addItem(pg.InfiniteLine(pos=avg_parameter1_2, angle=0, pen=pg.mkPen(color=QtGui.QColor(255, 179, 0), width=1, style=pg.QtCore.Qt.DashLine)))
+                avg_text = pg.TextItem(text=f"평균값 (실제 값과 다를수 있음!)\n{avg_parameter1_2:.3f}", color=QtGui.QColor(255, 179, 0), anchor=(0, 0.5))
+                avg_text.setPos(chart1_pos, avg_parameter1_2)
+                self.Chart_1.addItem(avg_text)
 
-                # 평균, 최대값 좌표도 유효 구간에 맞춰 텍스트 배치
-                chart1_pos = x_valid_end - (x_valid_end - x_valid_start) * 0.1  # 유효 구간 끝에서 10% 안쪽
+            max_parameter2 = max(self.y2_data)
+            self.Chart_2.addItem(pg.InfiniteLine(pos=max_parameter2, angle=0, pen=pg.mkPen(color='red', width=1, style=pg.QtCore.Qt.DashLine)))
 
             parameter2_array = np.array(self.y2_data)
-            Effective_value2 = 1  # 데이터 1 이상을 유효 구간으로 간주
-
-            # 유효 추력 시작/끝 인덱스 구하기
+            Effective_value2 = 1
             valid_indices = np.where(parameter2_array > Effective_value2)[0]
             if len(valid_indices) > 0:
-                start_idx = valid_indices[0]
-                end_idx = valid_indices[-1]
-                x_valid_start = self.x_data[start_idx]
-                x_valid_end = self.x_data[end_idx]
+                start_idx, end_idx = valid_indices[0], valid_indices[-1]
+                avg_parameter2_2 = np.mean(parameter2_array[start_idx:end_idx + 1])
+                self.Chart_2.addItem(pg.InfiniteLine(pos=avg_parameter2_2, angle=0, pen=pg.mkPen(color=QtGui.QColor(255, 179, 0), width=1, style=pg.QtCore.Qt.DashLine)))
+                avg_text = pg.TextItem(text=f"평균값 (실제 값과 다를수 있음!)\n{avg_parameter2_2:.3f}", color=QtGui.QColor(255, 179, 0), anchor=(0, 0.5))
+                avg_text.setPos(chart2_pos, avg_parameter2_2)
+                self.Chart_2.addItem(avg_text)
 
-                # 평균, 최대값 좌표도 유효 구간에 맞춰 텍스트 배치
-                chart2_pos = x_valid_end - (x_valid_end - x_valid_start) * 0  # 유효 구간 끝에서 10% 안쪽
+            valid_indices = np.where(parameter1_array > Effective_value1)[0]
+            if len(valid_indices) > 0:
+                x_valid_start = self.x_data[valid_indices[0]]
+                x_valid_end = self.x_data[valid_indices[-1]]
+                chart1_pos = x_valid_end - (x_valid_end - x_valid_start) * 0.1
 
+            valid_indices = np.where(parameter2_array > Effective_value2)[0]
+            if len(valid_indices) > 0:
+                x_valid_start = self.x_data[valid_indices[0]]
+                x_valid_end = self.x_data[valid_indices[-1]]
+                chart2_pos = x_valid_end - (x_valid_end - x_valid_start) * 0
 
-
-            # 텍스트 아이템 추가: 최대 파라미터1값
             max_text = pg.TextItem(text=f"최대값 (실제 값과 다를수 있음!)\n{max_parameter1:.3f}", color=QtGui.QColor(216, 0, 68), anchor=(0, 0.5))
             max_text.setPos(chart1_pos, max_parameter1)
             self.Chart_1.addItem(max_text)
 
-            # 텍스트 아이템 추가: 평균 파라미터1값
-            avg_text = pg.TextItem(text=f"평균값 (실제 값과 다를수 있음!)\n{avg_parameter1:.3f}", color=QtGui.QColor(255, 179, 0), anchor=(0, 0.5))
-            avg_text.setPos(chart1_pos, avg_parameter1)
-            self.Chart_1.addItem(avg_text)
-
-            # 텍스트 아이템 추가: 최대 파라미터2값
             max_text = pg.TextItem(text=f"최대값 (실제 값과 다를수 있음!)\n{max_parameter2:.3f}", color=QtGui.QColor(216, 0, 68), anchor=(0, 0.5))
             max_text.setPos(chart2_pos, max_parameter2)
             self.Chart_2.addItem(max_text)
 
-            # 텍스트 아이템 추가: 평균 파라미터2값
-            avg_text = pg.TextItem(text=f"평균값 (실제 값과 다를수 있음!)\n{avg_parameter2:.3f}", color=QtGui.QColor(255, 179, 0), anchor=(0, 0.5))
-            avg_text.setPos(chart2_pos, avg_parameter2)
-            self.Chart_2.addItem(avg_text)
+        except Exception as e:
+            print(f"signal 처리 중 오류: {e}")
+
+    #하이드
+    def show_feedback(self, title: str, info: str):
+        _translate = QtCore.QCoreApplication.translate
+        self.feedback_Title.setText(_translate("MainWindow", title))
+        self.feedback_Info.setText(_translate("MainWindow", info))
+        self.feedback_time.setText(_translate("MainWindow", datetime.now().strftime("%H:%M")))
+
+        for widget in [self.feedback_Title, self.feedback_logo, self.feedback_Info, self.feedback_Box, self.feedback_time]:
+            widget.show()
+
+        if not hasattr(self, "feedback_timer"):
+            self.feedback_timer = QTimer()
+            self.feedback_timer.setSingleShot(True)
+            self.feedback_timer.timeout.connect(self.hide_feedback)
+        else:
+            self.feedback_timer.stop()
+
+        self.feedback_timer.start(3000)
+
+    def hide_feedback(self):
+        for widget in [self.feedback_Title, self.feedback_logo, self.feedback_Info, self.feedback_Box, self.feedback_time]:
+            widget.hide()
 
 
+
+
+    def signal(self, data):
+        _translate = QtCore.QCoreApplication.translate
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+        print(f"[{current_time}] Received data: {data}")
+        self.flight_data_text.setText(f"[{current_time}]:{data}")
+        self.log_entry += f"[{current_time}] Received data: {data}\n"
+        self.terminal_main.append(f"[{current_time}]:{data}")
+
+        try:
+            data_list = data.split(',')
+            parameter1_data = float(data_list[0]) * 9.8  # 추력 (N)
+            parameter2_data = float(data_list[1])        # 압력 (Mpa)
+            ignition_signal = int(data_list[4])
+
+            # 센서 이상값 처리
+            if parameter1_data > 500:
+                print(f"[{current_time}] 이상 센서 값 감지: {parameter1_data:.1f}N → 0N 처리됨")
+                parameter1_data = 0
+            elif parameter1_data < -100:
+                print(f"[{current_time}] 이상 센서 값 감지: {parameter1_data:.1f}N → 0N 처리됨")
+                parameter1_data = 0
+            elif parameter1_data < 0:
+                parameter1_data = 0
+
+            self.parameter1_main.setText(_translate("MainWindow", f"{parameter1_data:.1f}"))
+            self.parameter2_main.setText(_translate("MainWindow", f"{parameter2_data:.2f}"))
+
+            if I_S == 0: # 수동 점화 상태
+                # --- 점화 감지 ---
+                if ignition_signal == 1 and not hasattr(self, 'ignition_detected'):
+                    self.ignition_detected = True
+                    step_img = Path(__file__).parent / "img" / "step" / "step_2_3.png"
+                    self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+                    print(f"[{current_time}] ▶ 점화 신호 감지")
+                    self.show_feedback("점화", "점화 신호가 확인되었습니다!", "IGNITION 신호 확인")
+
+                # --- 추진 시작 감지 ---
+                if parameter1_data > 50 and not hasattr(self, 'thrust_detected'):
+                    self.thrust_detected = True
+                    step_img = Path(__file__).parent / "img" / "step" / "step_2_4.png"
+                    self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+                    print(f"[{current_time}] ▶ 유효 추력 감지됨: {parameter1_data:.1f}N")
+                    self.show_feedback("추진 시작", "파라미터1 에서 유효값이 감지되었습니다!", "모터 상태: 추진 시작")
+
+                # --- 추진 종료 감지 ---
+                if hasattr(self, 'thrust_detected') and self.thrust_detected and not hasattr(self, 'thrust_ended') and parameter1_data < 20:
+                    self.thrust_ended = True
+                    step_img = Path(__file__).parent / "img" / "step" / "step_2_5.png"
+                    self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+                    print(f"[{current_time}] ▶ 추력 종료 감지됨: {parameter1_data:.1f}N")
+                    self.show_feedback("추진 종료", "파라미터1 에서 유효값이 감지되지 않습니다!", "모터 상태: 추진 종료")
+
+            if I_S == 1: # 시퀀스 상태
+                # --- 점화 감지 ---
+                if ignition_signal == 1 and not hasattr(self, 'ignition_detected'):
+                    self.ignition_detected = True
+                    step_img = Path(__file__).parent / "img" / "step" / "step_1_3.png"
+                    self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+                    print(f"[{current_time}] ▶ 점화 신호 감지")
+                    self.show_feedback("점화", "점화 신호가 확인되었습니다!", "IGNITION 신호 확인")
+
+                # --- 추진 시작 감지 ---
+                if parameter1_data > 50 and not hasattr(self, 'thrust_detected'):
+                    self.thrust_detected = True
+                    step_img = Path(__file__).parent / "img" / "step" / "step_1_4.png"
+                    self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+                    print(f"[{current_time}] ▶ 유효 추력 감지됨: {parameter1_data:.1f}N")
+                    self.show_feedback("추진 시작", "파라미터1 에서 유효값이 감지되었습니다!", "모터 상태: 추진 시작")
+
+                # --- 추진 종료 감지 ---
+                if hasattr(self, 'thrust_detected') and self.thrust_detected and not hasattr(self, 'thrust_ended') and parameter1_data < 20:
+                    self.thrust_ended = True
+                    step_img = Path(__file__).parent / "img" / "step" / "step_1_5.png"
+                    self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+                    print(f"[{current_time}] ▶ 추력 종료 감지됨: {parameter1_data:.1f}N")
+                    self.show_feedback("추진 종료", "파라미터1 에서 유효값이 감지되지 않습니다!", "모터 상태: 추진 종료")
+
+                # --- 추진 종료 감지 ---
+                if hasattr(self, 'thrust_detected') and self.thrust_detected and not hasattr(self, 'thrust_ended') and parameter1_data < 20:
+                    self.thrust_ended = True
+                    step_img = Path(__file__).parent / "img" / "step" / "step_5.png"
+                    self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+                    print(f"[{current_time}] ▶ 추력 종료 감지됨: {parameter1_data:.1f}N")
+                    self.show_feedback("추진 종료", "파라미터1 에서 유효값이 감지되지 않습니다!", "모터 상태: 추진 종료")
+
+            else: # 완전수동 점화 상태
+                # --- 추진 시작 감지 ---
+                if parameter1_data > 50 and not hasattr(self, 'thrust_detected'):
+                    self.thrust_detected = True
+                    step_img = Path(__file__).parent / "img" / "step" / "step_3_4.png"
+                    self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+                    print(f"[{current_time}] ▶ 유효 추력 감지됨: {parameter1_data:.1f}N")
+                    self.show_feedback("추진 시작", "파라미터1 에서 유효값이 감지되었습니다!", "모터 상태: 추진 시작")
+
+                # --- 추진 종료 감지 ---
+                if hasattr(self, 'thrust_detected') and self.thrust_detected and not hasattr(self, 'thrust_ended') and parameter1_data < 20:
+                    self.thrust_ended = True
+                    step_img = Path(__file__).parent / "img" / "step" / "step_3_5.png"
+                    self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+                    print(f"[{current_time}] ▶ 추력 종료 감지됨: {parameter1_data:.1f}N")
+                    self.show_feedback("추진 종료", "파라미터1 에서 유효값이 감지되지 않습니다!", "모터 상태: 추진 종료")
 
 
         except Exception as e:
-            print(f"signal 처리 중 오류: {e}")
+            print(f"[{current_time}] signal 처리 중 오류: {e}")
+
 
     def time(self, current_time):
         global sim_ig
@@ -2486,6 +2683,8 @@ class Ui_MainWindow(object):
                                 print("ignition")
                                 self.terminal_main.append("ignition")
                                 print("ignition_signal (가상)")
+                                step_img = Path(__file__).parent / "img" / "step" / "step_1_3.png"
+                                self.step.setPixmap(QtGui.QPixmap(str(step_img)))
                                 self.flight_info_text.setText(_translate("MainWindow", "IGNITION (가상)"))
                                 self.feedback_Title.setText(_translate("MainWindow", "점화"))
                                 self.feedback_Info.setText(_translate("MainWindow", "점화 신호가 확인되었습니다! (가상)"))
@@ -2568,39 +2767,12 @@ class Ui_MainWindow(object):
         global I_S
         global chart_count
         _translate = QtCore.QCoreApplication.translate
+
         if sequence == 1:
-            self.feedback_Title.setText(_translate("MainWindow", "주의"))
-            self.feedback_Info.setText(_translate("MainWindow", "시퀀스가 이미 진행중입니다!"))
-            current_time_2 = datetime.now().strftime("%H:%M")
-            self.feedback_time.setText(_translate("MainWindow", current_time_2))
-            self.feedback_Title.show()
-            self.feedback_logo.show()
-            self.feedback_Info.show()
-            self.feedback_Box.show()
-            self.feedback_time.show()
-            QTest.qWait(3000)
-            self.feedback_Title.hide()
-            self.feedback_logo.hide()
-            self.feedback_Info.hide()
-            self.feedback_Box.hide()
-            self.feedback_time.hide()
+            self.show_feedback("주의", "시퀀스가 이미 진행중입니다!")
         else:
             if safty_count == 1:
-                self.feedback_Title.setText(_translate("MainWindow", "Safty MODE"))
-                self.feedback_Info.setText(_translate("MainWindow", "안전 모드가 활성화 중입니다!"))
-                current_time_2 = datetime.now().strftime("%H:%M")
-                self.feedback_time.setText(_translate("MainWindow", current_time_2))
-                self.feedback_Title.show()
-                self.feedback_logo.show()
-                self.feedback_Info.show()
-                self.feedback_Box.show()
-                self.feedback_time.show()
-                QTest.qWait(3000)
-                self.feedback_Title.hide()
-                self.feedback_logo.hide()
-                self.feedback_Info.hide()
-                self.feedback_Box.hide()
-                self.feedback_time.hide()
+                self.show_feedback("Safty MODE", "안전 모드가 활성화 중입니다!")
             else:
                 I_S = 1
                 self.Chart_box.hide()
@@ -2630,233 +2802,282 @@ class Ui_MainWindow(object):
         self.confirm_text1.hide()
 
     def HW_Check(self):
-        self.x_data = []
-        self.y_data = []
-        self.y2_data = []
+        # self.x_data = []
+        # self.y_data = []
+        # self.y2_data = []
         
-        # 가상 데이터 생성
-        # 비어있던 데이터에 가상 데이터를 할당
-        self.x_data = np.linspace(0, 5, 1000)
-        self.y_data = np.piecewise(
-            self.x_data,
-            [self.x_data < 0.2, (0.2 <= self.x_data) & (self.x_data < 3.5), self.x_data >= 3.5],
-            [
-                lambda x: 500 * (x / 0.2),         # 급상승 (점화 구간)
-                lambda x: 500,                     # 유지 구간
-                lambda x: 500 * np.exp(-5*(x - 3.5))  # 연소 종료 감쇠
-            ]
-        )
-        self.y2_data = np.piecewise(
-            self.x_data,
-            [self.x_data < 0.2, (0.2 <= self.x_data) & (self.x_data < 3.5), self.x_data >= 3.5],
-            [
-                lambda x: 4 * (x / 0.2),         # 급상승 (점화 구간)
-                lambda x: 4,                     # 유지 구간
-                lambda x: 4 * np.exp(-5*(x - 3.5))  # 연소 종료 감쇠
-            ]
-        )    
+        # # 가상 데이터 생성
+        # # 비어있던 데이터에 가상 데이터를 할당
+        # self.x_data = np.linspace(0, 5, 1000)
+        # self.y_data = np.piecewise(
+        #     self.x_data,
+        #     [self.x_data < 0.2, (0.2 <= self.x_data) & (self.x_data < 3.5), self.x_data >= 3.5],
+        #     [
+        #         lambda x: 500 * (x / 0.2),         # 급상승 (점화 구간)
+        #         lambda x: 500,                     # 유지 구간
+        #         lambda x: 500 * np.exp(-5*(x - 3.5))  # 연소 종료 감쇠
+        #     ]
+        # )
+        # self.y2_data = np.piecewise(
+        #     self.x_data,
+        #     [self.x_data < 0.2, (0.2 <= self.x_data) & (self.x_data < 3.5), self.x_data >= 3.5],
+        #     [
+        #         lambda x: 4 * (x / 0.2),         # 급상승 (점화 구간)
+        #         lambda x: 4,                     # 유지 구간
+        #         lambda x: 4 * np.exp(-5*(x - 3.5))  # 연소 종료 감쇠
+        #     ]
+        # )    
 
-        # 그래프 클리어 후 그리기
-        self.Chart_1.clear()
-        self.Chart_1.plot(self.x_data, self.y_data)
+        # # 그래프 클리어 후 그리기
+        # self.Chart_1.clear()
+        # self.Chart_1.plot(self.x_data, self.y_data)
 
         
         
-        pen = pg.mkPen(color=(0, 200, 255), width=2)
+        # pen = pg.mkPen(color=(0, 200, 255), width=2)
 
-        gradient = QtGui.QLinearGradient(0, 0, 0, 1000)  # y=0 ~ y=10 구간에서 그라데이션
-        gradient.setCoordinateMode(QtGui.QGradient.LogicalMode)
-        gradient.setColorAt(1.0, QtGui.QColor(0, 200, 255, 200))    # 위쪽
-        gradient.setColorAt(0.0, QtGui.QColor(0, 200, 255, 0))  # 아래쪽
+        # gradient = QtGui.QLinearGradient(0, 0, 0, 1000)  # y=0 ~ y=10 구간에서 그라데이션
+        # gradient.setCoordinateMode(QtGui.QGradient.LogicalMode)
+        # gradient.setColorAt(1.0, QtGui.QColor(0, 200, 255, 200))    # 위쪽
+        # gradient.setColorAt(0.0, QtGui.QColor(0, 200, 255, 0))  # 아래쪽
 
-        brush = QtGui.QBrush(gradient)
+        # brush = QtGui.QBrush(gradient)
 
 
 
-        self.Chart_1.plot(
-            self.x_data, self.y_data,
-            pen=pen,
-            fillLevel=0,        # y=0을 기준으로 아래를 채움
-            brush=brush         # 채우는 색
-        )
+        # self.Chart_1.plot(
+        #     self.x_data, self.y_data,
+        #     pen=pen,
+        #     fillLevel=0,        # y=0을 기준으로 아래를 채움
+        #     brush=brush         # 채우는 색
+        # )
 
-        # 압력 그래프 (Chart_2)
-        self.Chart_2.clear()
-        self.Chart_2.plot(self.x_data, self.y2_data)
+        # # 압력 그래프 (Chart_2)
+        # self.Chart_2.clear()
+        # self.Chart_2.plot(self.x_data, self.y2_data)
 
-        pen = pg.mkPen(color=(255, 24, 116), width=2)
+        # pen = pg.mkPen(color=(255, 24, 116), width=2)
 
-        gradient = QtGui.QLinearGradient(0, 0, 0, 10)  # y=0 ~ y=10 구간에서 그라데이션
-        gradient.setCoordinateMode(QtGui.QGradient.LogicalMode)
-        gradient.setColorAt(1.0, QtGui.QColor(216, 0, 68, 200))    # 위쪽rgb(216, 0, 68)  QtGui.QColor(216, 0, 68) QtGui.QColor(0, 200, 255
-        gradient.setColorAt(0.0, QtGui.QColor(216, 0, 68, 0))  # 아래쪽
+        # gradient = QtGui.QLinearGradient(0, 0, 0, 10)  # y=0 ~ y=10 구간에서 그라데이션
+        # gradient.setCoordinateMode(QtGui.QGradient.LogicalMode)
+        # gradient.setColorAt(1.0, QtGui.QColor(216, 0, 68, 200))    # 위쪽rgb(216, 0, 68)  QtGui.QColor(216, 0, 68) QtGui.QColor(0, 200, 255
+        # gradient.setColorAt(0.0, QtGui.QColor(216, 0, 68, 0))  # 아래쪽
 
-        brush = QtGui.QBrush(gradient)
+        # brush = QtGui.QBrush(gradient)
         
-        self.Chart_2.plot(
-            self.x_data, self.y2_data,
-            pen=pen,
-            fillLevel=0,        # y=0을 기준으로 아래를 채움
-            brush=brush         # 채우는 색
-        )
-        for y_value in [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600]:
-            line = pg.InfiniteLine(pos=y_value, angle=0, pen=pg.mkPen((150, 150, 150), width=0.3))
-            self.Chart_1.addItem(line)
-        for y_value in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5]:
-            line = pg.InfiniteLine(pos=y_value, angle=0, pen=pg.mkPen((150, 150, 150), width=0.3))
-            self.Chart_2.addItem(line)
+        # self.Chart_2.plot(
+        #     self.x_data, self.y2_data,
+        #     pen=pen,
+        #     fillLevel=0,        # y=0을 기준으로 아래를 채움
+        #     brush=brush         # 채우는 색
+        # )
+        # for y_value in [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600]:
+        #     line = pg.InfiniteLine(pos=y_value, angle=0, pen=pg.mkPen((150, 150, 150), width=0.3))
+        #     self.Chart_1.addItem(line)
+        # for y_value in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5]:
+        #     line = pg.InfiniteLine(pos=y_value, angle=0, pen=pg.mkPen((150, 150, 150), width=0.3))
+        #     self.Chart_2.addItem(line)
 
-        # 최대 파라미터1 계산
-        max_parameter1 = max(self.y_data)
+        # # 최대 파라미터1 계산
+        # max_parameter1 = max(self.y_data)
 
-        # 최대 파라미터1 지점에 빨간 가로줄 추가
-        max_line = pg.InfiniteLine(
-            pos=max_parameter1,
-            angle=0,  # 수평선
-            pen=pg.mkPen(color='red', width=1, style=pg.QtCore.Qt.DashLine)
-        )
-        self.Chart_1.addItem(max_line)
+        # # 최대 파라미터1 지점에 빨간 가로줄 추가
+        # max_line = pg.InfiniteLine(
+        #     pos=max_parameter1,
+        #     angle=0,  # 수평선
+        #     pen=pg.mkPen(color='red', width=1, style=pg.QtCore.Qt.DashLine)
+        # )
+        # self.Chart_1.addItem(max_line)
 
-        # 평균 파라미터1 계산
-        avg_parameter1 = sum(self.y_data) / len(self.y_data)
+        # # 평균 파라미터1 계산
+        # avg_parameter1 = sum(self.y_data) / len(self.y_data)
 
-        # 평균 파라미터1 지점에 파란 점선 추가
-        avg_line = pg.InfiniteLine(
-            pos=avg_parameter1,
-            angle=0,  # 수평선
-            pen=pg.mkPen(color=QtGui.QColor(255, 179, 0), width=1, style=pg.QtCore.Qt.DashLine)
-        )
-        self.Chart_1.addItem(avg_line)
+        # # 평균 파라미터1 지점에 파란 점선 추가
+        # avg_line = pg.InfiniteLine(
+        #     pos=avg_parameter1,
+        #     angle=0,  # 수평선
+        #     pen=pg.mkPen(color=QtGui.QColor(255, 179, 0), width=1, style=pg.QtCore.Qt.DashLine)
+        # )
+        # self.Chart_1.addItem(avg_line)
 
-         # 최대 파라미터2 계산
-        max_parameter2 = max(self.y2_data)
+        #  # 최대 파라미터2 계산
+        # max_parameter2 = max(self.y2_data)
 
-        # 최대 파라미터2 지점에 빨간 가로줄 추가
-        max_line = pg.InfiniteLine(
-            pos=max_parameter2,
-            angle=0,  # 수평선
-            pen=pg.mkPen(color='red', width=1, style=pg.QtCore.Qt.DashLine)
-        )
-        self.Chart_2.addItem(max_line)
+        # # 최대 파라미터2 지점에 빨간 가로줄 추가
+        # max_line = pg.InfiniteLine(
+        #     pos=max_parameter2,
+        #     angle=0,  # 수평선
+        #     pen=pg.mkPen(color='red', width=1, style=pg.QtCore.Qt.DashLine)
+        # )
+        # self.Chart_2.addItem(max_line)
 
-        # 평균 파라미터2 계산
-        avg_parameter2 = sum(self.y2_data) / len(self.y2_data)
+        # # 평균 파라미터2 계산
+        # avg_parameter2 = sum(self.y2_data) / len(self.y2_data)
 
-        # 평균 파라미터2 지점에 파란 점선 추가
-        avg_line = pg.InfiniteLine(
-            pos=avg_parameter2,
-            angle=0,  # 수평선
-            pen=pg.mkPen(color=QtGui.QColor(255, 179, 0), width=1, style=pg.QtCore.Qt.DashLine)
-        )
-        self.Chart_2.addItem(avg_line)
+        # # 평균 파라미터2 지점에 파란 점선 추가
+        # avg_line = pg.InfiniteLine(
+        #     pos=avg_parameter2,
+        #     angle=0,  # 수평선
+        #     pen=pg.mkPen(color=QtGui.QColor(255, 179, 0), width=1, style=pg.QtCore.Qt.DashLine)
+        # )
+        # self.Chart_2.addItem(avg_line)
 
-        parameter1_array = np.array(self.y_data)
-        Effective_value1 = 10  # 데이터10 이상을 유효 구간으로 간주
+        # parameter1_array = np.array(self.y_data)
+        # Effective_value1 = 10  # 데이터10 이상을 유효 구간으로 간주
 
-        # 유효 추력 시작/끝 인덱스 구하기
-        valid_indices = np.where(parameter1_array > Effective_value1)[0]
-        if len(valid_indices) > 0:
-            start_idx = valid_indices[0]
-            end_idx = valid_indices[-1]
-            x_valid_start = self.x_data[start_idx]
-            x_valid_end = self.x_data[end_idx]
+        # # 유효 추력 시작/끝 인덱스 구하기
+        # valid_indices = np.where(parameter1_array > Effective_value1)[0]
+        # if len(valid_indices) > 0:
+        #     start_idx = valid_indices[0]
+        #     end_idx = valid_indices[-1]
+        #     x_valid_start = self.x_data[start_idx]
+        #     x_valid_end = self.x_data[end_idx]
 
-            # 평균, 최대값 좌표도 유효 구간에 맞춰 텍스트 배치
-            chart1_pos = x_valid_end - (x_valid_end - x_valid_start) * 0.1  # 유효 구간 끝에서 10% 안쪽
+        #     # 평균, 최대값 좌표도 유효 구간에 맞춰 텍스트 배치
+        #     chart1_pos = x_valid_end - (x_valid_end - x_valid_start) * 0.1  # 유효 구간 끝에서 10% 안쪽
 
-        parameter2_array = np.array(self.y2_data)
-        Effective_value2 = 1  # 데이터 1 이상을 유효 구간으로 간주
+        # parameter2_array = np.array(self.y2_data)
+        # Effective_value2 = 1  # 데이터 1 이상을 유효 구간으로 간주
 
-        # 유효 추력 시작/끝 인덱스 구하기
-        valid_indices = np.where(parameter2_array > Effective_value2)[0]
-        if len(valid_indices) > 0:
-            start_idx = valid_indices[0]
-            end_idx = valid_indices[-1]
-            x_valid_start = self.x_data[start_idx]
-            x_valid_end = self.x_data[end_idx]
+        # # 유효 추력 시작/끝 인덱스 구하기
+        # valid_indices = np.where(parameter2_array > Effective_value2)[0]
+        # if len(valid_indices) > 0:
+        #     start_idx = valid_indices[0]
+        #     end_idx = valid_indices[-1]
+        #     x_valid_start = self.x_data[start_idx]
+        #     x_valid_end = self.x_data[end_idx]
 
-            # 평균, 최대값 좌표도 유효 구간에 맞춰 텍스트 배치
-            chart2_pos = x_valid_end - (x_valid_end - x_valid_start) * 0  # 유효 구간 끝에서 10% 안쪽
+        #     # 평균, 최대값 좌표도 유효 구간에 맞춰 텍스트 배치
+        #     chart2_pos = x_valid_end - (x_valid_end - x_valid_start) * 0  # 유효 구간 끝에서 10% 안쪽
 
 
 
-        # 텍스트 아이템 추가: 최대 파라미터1값
-        max_text = pg.TextItem(text=f"최대값 (실제 값과 다를수 있음!)\n{max_parameter1:.3f}", color=QtGui.QColor(216, 0, 68), anchor=(0, 0.5))
-        max_text.setPos(chart1_pos, max_parameter1)
-        self.Chart_1.addItem(max_text)
+        # # 텍스트 아이템 추가: 최대 파라미터1값
+        # max_text = pg.TextItem(text=f"최대값 (실제 값과 다를수 있음!)\n{max_parameter1:.3f}", color=QtGui.QColor(216, 0, 68), anchor=(0, 0.5))
+        # max_text.setPos(chart1_pos, max_parameter1)
+        # self.Chart_1.addItem(max_text)
 
-        # 텍스트 아이템 추가: 평균 파라미터1값
-        avg_text = pg.TextItem(text=f"평균값 (실제 값과 다를수 있음!)\n{avg_parameter1:.3f}", color=QtGui.QColor(255, 179, 0), anchor=(0, 0.5))
-        avg_text.setPos(chart1_pos, avg_parameter1)
-        self.Chart_1.addItem(avg_text)
+        # # 텍스트 아이템 추가: 평균 파라미터1값
+        # avg_text = pg.TextItem(text=f"평균값 (실제 값과 다를수 있음!)\n{avg_parameter1:.3f}", color=QtGui.QColor(255, 179, 0), anchor=(0, 0.5))
+        # avg_text.setPos(chart1_pos, avg_parameter1)
+        # self.Chart_1.addItem(avg_text)
 
-        # 텍스트 아이템 추가: 최대 파라미터2값
-        max_text = pg.TextItem(text=f"최대값 (실제 값과 다를수 있음!)\n{max_parameter2:.3f}", color=QtGui.QColor(216, 0, 68), anchor=(0, 0.5))
-        max_text.setPos(chart2_pos, max_parameter2)
-        self.Chart_2.addItem(max_text)
+        # # 텍스트 아이템 추가: 최대 파라미터2값
+        # max_text = pg.TextItem(text=f"최대값 (실제 값과 다를수 있음!)\n{max_parameter2:.3f}", color=QtGui.QColor(216, 0, 68), anchor=(0, 0.5))
+        # max_text.setPos(chart2_pos, max_parameter2)
+        # self.Chart_2.addItem(max_text)
 
-        # 텍스트 아이템 추가: 평균 파라미터2값
-        avg_text = pg.TextItem(text=f"평균값 (실제 값과 다를수 있음!)\n{avg_parameter2:.3f}", color=QtGui.QColor(255, 179, 0), anchor=(0, 0.5))
-        avg_text.setPos(chart2_pos, avg_parameter2)
-        self.Chart_2.addItem(avg_text)
-
+        # # 텍스트 아이템 추가: 평균 파라미터2값
+        # avg_text = pg.TextItem(text=f"평균값 (실제 값과 다를수 있음!)\n{avg_parameter2:.3f}", color=QtGui.QColor(255, 179, 0), anchor=(0, 0.5))
+        # avg_text.setPos(chart2_pos, avg_parameter2)
+        # self.Chart_2.addItem(avg_text)
+        print("HWcheck")
+        
     def Manual_Ignition(self):
         global I_S
         global chart_count
         I_S = 0
         _translate = QtCore.QCoreApplication.translate
-        if safty_count == 1:
-            self.feedback_Title.setText(_translate("MainWindow", "Safty MODE"))
-            self.feedback_Info.setText(_translate("MainWindow", "안전 모드가 활성화 중입니다!"))
-            current_time_2 = datetime.now().strftime("%H:%M")
-            self.feedback_time.setText(_translate("MainWindow", current_time_2))
-            self.feedback_Title.show()
-            self.feedback_logo.show()
-            self.feedback_Info.show()
-            self.feedback_Box.show()
-            self.feedback_time.show()
-            QTest.qWait(3000)
-            self.feedback_Title.hide()
-            self.feedback_logo.hide()
-            self.feedback_Info.hide()
-            self.feedback_Box.hide()
-            self.feedback_time.hide()
-        else:
-            if sequence == 1:
-                self.feedback_Title.setText(_translate("MainWindow", "주의"))
-                self.feedback_Info.setText(_translate("MainWindow", "시퀀스가 이미 진행중입니다!"))
-                current_time_2 = datetime.now().strftime("%H:%M")
-                self.feedback_time.setText(_translate("MainWindow", current_time_2))
-                self.feedback_Title.show()
-                self.feedback_logo.show()
-                self.feedback_Info.show()
-                self.feedback_Box.show()
-                self.feedback_time.show()
-                QTest.qWait(3000)
-                self.feedback_Title.hide()
-                self.feedback_logo.hide()
-                self.feedback_Info.hide()
 
-                self.feedback_Box.hide()
-                self.feedback_time.hide()
+        if safty_count == 1:
+            self.show_feedback("Safty MODE", "안전 모드가 활성화 중입니다!")
+        elif sequence == 1:
+            self.show_feedback("주의", "시퀀스가 이미 진행중입니다!")
+        else:
+            self.Chart_box.hide()
+            self.Chart_3.hide()
+            self.Chart_2.hide()
+            self.Chart_1.hide()
+            chart_count = 0
+            print("Manual_Ignition")
+            self.confirm_text1.setText(_translate("MainWindow", "수동 점화"))
+            self.confirm_text2.setText(_translate("MainWindow", "수동 점화를 활성화 하시겠습니까?"))
+            manual_ignition_img_path = Path(__file__).parent / "img" / "cauntion.png"
+            self.confirm_logo.setPixmap(QtGui.QPixmap(str(manual_ignition_img_path)))
+            self.confirm_btn1.show()
+            self.confirm_btn2.show()
+            self.confirm_box.show()
+            self.confirm_logo.show()
+            self.confirm_text2.show()
+            self.confirm_exit_btn.show()
+            self.confirm_text1.show()
+
+    def seq_reset(self):
+        global t
+        global t_set
+        global I_S
+        global sequence
+        global re_seq_count
+
+        _translate = QtCore.QCoreApplication.translate
+
+        if sequence == 1:
+            I_S = 3
+            sequence = 0
+            t = t_set
+            self.Abort_btn1.hide()
+            self.Abort_btn2.hide()
+            self.Abort_btn3.hide()
+            self.Abort_Box.hide()
+            self.Abort_text.hide()
+            step_img = Path(__file__).parent / "img" / "step" / "step_1_1.png"
+            self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+            # 시퀀스 시간 초기화
+            self.Sequence_time_text.setText(_translate("Dialog", f"T-{t_set}"))
+            self.show_feedback("시퀀스 초기화", "시퀀스가 초기화되었습니다!")
+        else:
+            self.show_feedback("시퀀스 거부", "시퀀스가 작동중이지 않습니다!")
+
+    def seq_tp10(self):
+        global t
+        global t_set
+        global I_S
+        global sequence
+        global re_seq_count
+
+        _translate = QtCore.QCoreApplication.translate
+
+
+        if sequence == 1:
+            if t > 0:
+                t += 10
+                self.Sequence_time_text.setText(_translate("Dialog", f"T-{t}"))
+                self.show_feedback("시퀀스 메니저", "시퀀스를 연장하였습니다!")
             else:
-                self.Chart_box.hide()
-                self.Chart_3.hide()
-                self.Chart_2.hide()
-                self.Chart_1.hide()
-                chart_count = 0
-                print("Manual_Ignition")
-                self.confirm_text1.setText(_translate("MainWindow", "수동 점화"))
-                self.confirm_text2.setText(_translate("MainWindow", "수동 점화를 활성화 하시겠습니까?"))
-                manual_ignition_img_path = Path(__file__).parent / "img" / "Manual_igniton.png"
-                self.confirm_logo.setPixmap(QtGui.QPixmap(str(manual_ignition_img_path)))
-                self.confirm_btn1.show()
-                self.confirm_btn2.show()
-                self.confirm_box.show()
-                self.confirm_logo.show()
-                self.confirm_text2.show()
-                self.confirm_exit_btn.show()
-                self.confirm_text1.show()
+                self.show_feedback("시퀀스 메니저", "시퀀스가 이미 t- 입니다!")
+        else:
+            t_set += 10
+            t = t_set
+            self.Sequence_time_text.setText(_translate("Dialog", f"T-{t}"))
+            self.show_feedback("시퀀스 메니저", "시퀀스를 연장하였습니다!")
+
+    def seq_tm10(self):
+        global t
+        global t_set
+        global I_S
+        global sequence
+        global re_seq_count
+
+        _translate = QtCore.QCoreApplication.translate
+
+        if sequence == 1:
+            if t > 0:
+                if t > 20:
+                    t -= 10
+                    self.Sequence_time_text.setText(_translate("Dialog", f"T-{t}"))
+                    self.show_feedback("시퀀스 메니저", "시퀀스를 단축하였습니다!")
+                else:
+                    self.show_feedback("시퀀스 메니저", "시퀀스가 t-20 이하 입니다!")
+            else:
+                self.show_feedback("시퀀스 메니저", "시퀀스가 이미 t- 입니다!")
+        else:
+            if t_set > 20:
+                t_set -= 10
+                t = t_set
+                self.Sequence_time_text.setText(_translate("Dialog", f"T-{t}"))
+                self.show_feedback("시퀀스 메니저", "시퀀스를 단축하였습니다!")
+            else:
+                self.show_feedback("시퀀스 메니저", "시퀀스가 t-20 이하 입니다!")
         
 
     def abort(self):
@@ -2867,39 +3088,63 @@ class Ui_MainWindow(object):
 
         _translate = QtCore.QCoreApplication.translate
 
+        def C_hide_feedback():
+            self.feedback_Title.hide()
+            self.feedback_logo.hide()
+            self.feedback_Info.hide()
+            self.feedback_Box.hide()
+            self.feedback_time.hide()
+            self.flight_info_text.setText(_translate("MainWindow", "Normal"))
+
+        def C_show_feedback(title, info, flight_status):
+            self.flight_info_text.setText(_translate("MainWindow", flight_status))
+            self.feedback_Title.setText(_translate("MainWindow", title))
+            self.feedback_Info.setText(_translate("MainWindow", info))
+            self.feedback_time.setText(_translate("MainWindow", datetime.now().strftime("%H:%M")))
+
+            self.feedback_Title.show()
+            self.feedback_logo.show()
+            self.feedback_Info.show()
+            self.feedback_Box.show()
+            self.feedback_time.show()
+
+            if not hasattr(self, "feedback_timer"):
+                self.feedback_timer = QTimer()
+                self.feedback_timer.setSingleShot(True)
+                self.feedback_timer.timeout.connect(C_hide_feedback)
+            else:
+                self.feedback_timer.stop()
+            self.feedback_timer.start(3000)
+
         sequence = 0
         abort = 0
         safty_count = 1
 
+        step_img = Path(__file__).parent / "img" / "step" / "step_1_1.png"
+        self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+
+        # 음성 출력
         pygame.mixer.music.stop()
         pygame.mixer.music.load(Path(__file__).parent / "mp3" / "abort.mp3")
         pygame.mixer.music.play()
         print("play")
 
+        # 시퀀스 시간 초기화
         self.Sequence_time_text.setText(_translate("Dialog", f"T-{t_set}"))
-        self.feedback_Title.setText(_translate("MainWindow", "ABORT"))
-        self.feedback_Info.setText(_translate("MainWindow", "안전모드로 자동 변환 되었습니다!"))
-        current_time_2 = datetime.now().strftime("%H:%M")
-        self.feedback_time.setText(_translate("MainWindow", current_time_2))
-        self.flight_info_text.setText(_translate("MainWindow", "ABORT - 시퀀스가 중단되었습니다!"))
+
+        # 안전모드 이미지 전환
         safty_img_path = Path(__file__).parent / "img" / "safty_locked.png"
         self.Flight_interface_Safty_btn.setPixmap(QtGui.QPixmap(str(safty_img_path)))
+
+        # ABORT UI 숨기기
         self.Abort_btn1.hide()
         self.Abort_btn2.hide()
         self.Abort_btn3.hide()
         self.Abort_Box.hide()
         self.Abort_text.hide()
-        self.feedback_Title.show()
-        self.feedback_logo.show()
-        self.feedback_Info.show()
-        self.feedback_Box.show()
-        self.feedback_time.show()
-        QTest.qWait(3000)
-        self.feedback_Title.hide()
-        self.feedback_logo.hide()
-        self.feedback_Info.hide()
-        self.feedback_Box.hide()
-        self.feedback_time.hide()
+
+        # ABORT 피드백 출력
+        C_show_feedback("ABORT", "안전모드로 자동 변환 되었습니다!", "ABORT - 시퀀스가 중단되었습니다!")
 
     def Confirm(self):
         _translate = QtCore.QCoreApplication.translate
@@ -2907,95 +3152,110 @@ class Ui_MainWindow(object):
         global t
         global t_set
         global sequence
-        t = t_set
 
-        def hide_feedback():
+        global avg_parameter1_2
+        global avg_parameter2_2
+        global max_parameter1
+        global max_parameter2
+
+        def C_hide_feedback():
             self.feedback_Title.hide()
             self.feedback_logo.hide()
             self.feedback_Info.hide()
             self.feedback_Box.hide()
             self.feedback_time.hide()
+            self.flight_info_text.setText(_translate("MainWindow", "Normal"))
 
-        if I_S == 1:
-            print("sequence")
-            self.confirm_btn1.hide()
-            self.confirm_btn2.hide()
-            self.confirm_box.hide()
-            self.confirm_logo.hide()
-            self.confirm_text2.hide()
-            self.confirm_exit_btn.hide()
-            self.confirm_text1.hide()
+        def C_show_feedback(title, info, flight_status):
+            self.flight_info_text.setText(_translate("MainWindow", flight_status))
+            self.feedback_Title.setText(_translate("MainWindow", title))
+            self.feedback_Info.setText(_translate("MainWindow", info))
+            self.feedback_time.setText(_translate("MainWindow", datetime.now().strftime("%H:%M")))
 
-            if simulation_mode == 1:
-                sequence = 1
-                self.flight_info_text.setText(_translate("MainWindow", "카운트다운 시작"))
-                self.Abort_btn1.show()
-                self.Abort_btn2.show()
-                self.Abort_btn3.show()
-                self.Abort_Box.show()
-                self.Abort_text.show()
-                self.Sequence_time_text.setText(_translate("Dialog", f"T-{t}"))
-                self.feedback_Title.setText(_translate("MainWindow", "시퀀스 허가"))
-                self.feedback_Info.setText(_translate("MainWindow", "시퀀스가 시작되었습니다!"))
-                current_time_2 = datetime.now().strftime("%H:%M")
-                self.feedback_time.setText(_translate("MainWindow", current_time_2))
-                self.feedback_Title.show()
-                self.feedback_logo.show()
-                self.feedback_Info.show()
-                self.feedback_Box.show()
-                self.feedback_time.show()                
-                QTimer.singleShot(3000, hide_feedback)
-            else:
-                sequence = 1
-                self.flight_info_text.setText(_translate("MainWindow", "카운트다운 시작"))
-                self.Abort_btn1.show()
-                self.Abort_btn2.show()
-                self.Abort_btn3.show()
-                self.Abort_Box.show()
-                self.Abort_text.show()
-                self.Sequence_time_text.setText(_translate("Dialog", f"T-{t}"))
-                self.feedback_Title.setText(_translate("MainWindow", "시퀀스 허가"))
-                self.feedback_Info.setText(_translate("MainWindow", "시퀀스가 시작되었습니다!"))
-                current_time_2 = datetime.now().strftime("%H:%M")
-                self.feedback_time.setText(_translate("MainWindow", current_time_2))
-                self.feedback_Title.show()
-                self.feedback_logo.show()
-                self.feedback_Info.show()
-                self.feedback_Box.show()
-                self.feedback_time.show()                
-                QTimer.singleShot(3000, hide_feedback)
-
-        else:
-            pygame.mixer.music.load(Path(__file__).parent / "mp3" / "ignition.mp3")
-            pygame.mixer.music.play()
-            print("ignition")
-            self.terminal_main.append("ignition")
-            self.confirm_btn1.hide()
-            self.confirm_btn2.hide()
-            self.confirm_box.hide()
-            self.confirm_logo.hide()
-            self.confirm_text2.hide()
-            self.confirm_exit_btn.hide()
-            self.confirm_text1.hide()
-            self.flight_info_text.setText(_translate("MainWindow", "수동 점화 시작"))
-            self.ser.write("ignition".encode())
-            self.feedback_Title.setText(_translate("MainWindow", "수동 점화"))
-            self.feedback_Info.setText(_translate("MainWindow", "수동 점화가 시작되었습니다!"))
-            current_time_2 = datetime.now().strftime("%H:%M")
-            self.feedback_time.setText(_translate("MainWindow", current_time_2))
             self.feedback_Title.show()
             self.feedback_logo.show()
             self.feedback_Info.show()
             self.feedback_Box.show()
             self.feedback_time.show()
-            QTest.qWait(3000)
-            self.feedback_Title.hide()
-            self.feedback_logo.hide()
-            self.feedback_Info.hide()
-            self.feedback_Box.hide()
-            self.feedback_time.hide()
+
+            if not hasattr(self, "feedback_timer"):
+                self.feedback_timer = QTimer()
+                self.feedback_timer.setSingleShot(True)
+                self.feedback_timer.timeout.connect(C_hide_feedback)
+            else:
+                self.feedback_timer.stop()
+            self.feedback_timer.start(3000)
+
+        # UI 숨기기 (공통)
+        self.confirm_btn1.hide()
+        self.confirm_btn2.hide()
+        self.confirm_box.hide()
+        self.confirm_logo.hide()
+        self.confirm_text2.hide()
+        self.confirm_exit_btn.hide()
+        self.confirm_text1.hide()
+
+        if I_S == 0:  # 수동 점화
+            pygame.mixer.music.load(Path(__file__).parent / "mp3" / "ignition.mp3")
+            pygame.mixer.music.play()
+            print("ignition")
+            self.terminal_main.append("ignition")
+            self.ser.write("ignition".encode())
+            C_show_feedback("수동 점화", "수동 점화가 시작되었습니다!", "수동 점화 시작")
+
+        if I_S == 1: # 시퀀스 시작
+            t = t_set
+            step_img = Path(__file__).parent / "img" / "step" / "step_1.png"
+            self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+            print("sequence")
+            sequence = 1
+            self.flight_info_text.setText(_translate("MainWindow", "카운트다운 시작"))
+            self.Abort_btn1.show()
+            self.Abort_btn2.show()
+            self.Abort_btn3.show()
+            self.Abort_Box.show()
+            self.Abort_text.show()
+            self.Sequence_time_text.setText(_translate("Dialog", f"T-{t}"))
+            step_img = Path(__file__).parent / "img" / "step" / "step_1_2.png"
+            self.step.setPixmap(QtGui.QPixmap(str(step_img)))
+
+            C_show_feedback("시퀀스 허가", "시퀀스가 시작되었습니다!", "카운트다운 시작")
+
+        if I_S == 2:  # 데이터 초기화
+            print("data_reset")
+            self.terminal_main.append("data_reset")
+            self.log_entry = ""
+            self.x_data = []
+            self.y_data = []
+            self.y2_data = []
+            avg_parameter1_2 = 0
+            avg_parameter2_2 = 0
+            max_parameter1 = 00
+            max_parameter2 = 0
+
+            print("▶ 로그 및 그래프 데이터 초기화 완료")
+            print(f"log_entry: '{self.log_entry}'")
+            print(f"x_data: {self.x_data}")
+            print(f"y_data: {self.y_data}")
+            print(f"y2_data: {self.y2_data}")
+            print(f"avg_parameter1_2: {avg_parameter1_2}")
+            print(f"avg_parameter2_2: {avg_parameter2_2}")
+            print(f"max_parameter1: {max_parameter1}")
+            print(f"max_parameter2: {max_parameter2}")
+
+            self.terminal_main.append("※ 로그 및 그래프 데이터가 초기화되었습니다.")
+            self.terminal_main.append(f"avg_parameter1_2 = {avg_parameter1_2}")
+            self.terminal_main.append(f"avg_parameter2_2 = {avg_parameter2_2}")
+            self.terminal_main.append(f"max_parameter1 = {max_parameter1}")
+            self.terminal_main.append(f"max_parameter2 = {max_parameter2}")
+
+            self.start_time = time.time()
+            self.Chart_1.clear()
+            C_show_feedback("데이터 초기화 완료! ", "초기화 후에도 로그는 터미널에 보존됩니다.","Data reset")
 
     def export(self):
+
+
         _translate = QtCore.QCoreApplication.translate
         print("export")
         self.log_entry += "--------------------------------------------------------\n"
@@ -3020,25 +3280,9 @@ class Ui_MainWindow(object):
         # 로그 저장 후 콘솔 출력
         print(f"Log saved in: {log_file_path}")
         print(self.log_entry.strip())
-
-
-        self.feedback_Title.setText(_translate("MainWindow", "Export"))
-        self.feedback_Info.setText(_translate("MainWindow", "로그를 .txt 파일로 변환하였습니다"))
-        current_time_2 = datetime.now().strftime("%H:%M")
-        self.feedback_time.setText(_translate("MainWindow", current_time_2))
-        self.feedback_Title.show()
-        self.feedback_logo.show()
-        self.feedback_Info.show()
-        self.feedback_Box.show()
-        self.feedback_time.show()
-        QTest.qWait(3000)
-        self.feedback_Title.hide()
-        self.feedback_logo.hide()
-        self.feedback_Info.hide()
-        self.feedback_Box.hide()
-        self.feedback_time.hide()
-
-            
+        # 피드백 출력
+        self.show_feedback("Export", "로그를 .txt 파일로 변환하였습니다")
+        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
