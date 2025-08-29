@@ -4894,7 +4894,7 @@ class Ui_MainWindow(object):
                 self.feedback_timer.timeout.connect(C_hide_feedback)
             else:
                 self.feedback_timer.stop()
-            self.feedback_timer.start(3000)
+                self.feedback_timer.start(3000)
 
         sequence = 0
         abort = 0
@@ -4994,9 +4994,9 @@ class Ui_MainWindow(object):
             pygame.mixer.music.play()
             print("ignition")
             self.terminal_main.append("ignition")
-            self.ser.write("ignition".encode())
             C_show_feedback("수동 점화", "수동 점화가 시작되었습니다!", "수동 점화 시작")
             self.confirm_box.hide()
+            self.ser.write("ignition".encode())
 
         if I_S == 1: # 시퀀스 시작
             t = t_set
